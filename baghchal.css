@@ -6,11 +6,13 @@
   --goat-disc: #ffffff;
   --capture: #dc2626;
   --overlay: rgba(15, 18, 25, 0.55);
+  --warn-ink: #b45309;
+  --warn-bg: #fef3c7;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --goat-disc: #2a2f3b; --capture: #f87171; --overlay: rgba(0, 0, 0, 0.6); }
+  :root:not([data-theme="light"]) { --goat-disc: #2a2f3b; --capture: #f87171; --overlay: rgba(0, 0, 0, 0.6); --warn-ink: #fbbf24; --warn-bg: #3a2a0a; }
 }
-:root[data-theme="dark"] { --goat-disc: #2a2f3b; --capture: #f87171; --overlay: rgba(0, 0, 0, 0.6); }
+:root[data-theme="dark"] { --goat-disc: #2a2f3b; --capture: #f87171; --overlay: rgba(0, 0, 0, 0.6); --warn-ink: #fbbf24; --warn-bg: #3a2a0a; }
 
 .rules-btn {
   justify-self: end;
@@ -22,72 +24,151 @@
   color: var(--bagh-ink);
 }
 
-/* ---------- "You play as" picker: the main choice vs the computer ---------- */
-.side-pick {
-  margin: 0;
-  padding: 10px;
-  border: 2px solid color-mix(in srgb, var(--bagh-ink) 35%, transparent);
-  border-radius: 16px;
-  background: var(--bagh-bg);
-  min-width: 0;
-}
-.side-legend {
-  float: left; /* keeps the legend inside the box */
-  width: 100%;
-  margin: 0 0 8px;
-  padding: 0;
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--bagh-ink);
-  text-align: left;
-}
-.side-seg { clear: both; border-color: transparent; background: transparent; padding: 0; gap: 8px; }
-.side-seg span {
-  min-height: 58px;
-  display: flex;
+/* ---------- compact top: slim scores + one row of settings ---------- */
+/* On phones the board is the star: everything above it is kept short. */
+.game.bc { gap: 8px; }
+.bc .top h1 { font-size: 1.35rem; }
+.bc .back, .rules-btn { min-height: 40px; }
+.rules-btn { width: 40px; }
+
+.bc-scores { gap: 6px; }
+.bc-scores .score {
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  flex-wrap: wrap;
-  background: var(--card);
-  border: 1px solid var(--line);
-  color: var(--text);
-  font-size: 1.05rem;
+  padding: 4px 6px;
+  border-radius: 10px;
 }
-.side-seg small { flex-basis: 100%; margin-top: -6px; font-size: 0.72rem; font-weight: 600; opacity: 0.75; }
-.side-icon { font-size: 1.5rem; font-weight: 400; line-height: 1; }
-.side-seg input:checked + span {
-  background: var(--tiger-strong);
-  border-color: var(--tiger-strong);
-  color: #fff;
-  box-shadow: 0 6px 16px color-mix(in srgb, var(--tiger-strong) 40%, transparent);
-  transform: translateY(-1px);
-}
-
+.bc-scores .score span { font-size: 0.78rem; white-space: nowrap; }
+.bc-scores .score strong { font-size: 1.05rem; }
 .score.tiger strong { color: var(--tiger); }
 .score.goat strong { color: var(--text); }
 
-.bc-info {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+.bc-settings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 6px;
 }
-.chip {
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  background: var(--bagh-bg);
-  color: var(--bagh-ink);
-  border: 1px solid color-mix(in srgb, var(--bagh-ink) 20%, transparent);
+.game.bc:not(.cpu-mode) .bc-settings { grid-template-columns: 1fr; }
+.bc-settings .seg { padding: 3px; gap: 3px; border-radius: 12px; }
+.bc-settings .seg span { min-height: 38px; padding: 0 4px; font-size: 0.9rem; border-radius: 9px; }
+.side-seg { border-color: color-mix(in srgb, var(--bagh-ink) 35%, transparent); background: var(--bagh-bg); }
+.side-seg span { color: var(--bagh-ink); }
+.side-seg input:checked + span {
+  background: var(--tiger-strong);
+  color: #fff;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--tiger-strong) 40%, transparent);
 }
-.chip strong { font-variant-numeric: tabular-nums; }
-.chip.danger { background: color-mix(in srgb, var(--capture) 10%, var(--card)); color: var(--capture); border-color: color-mix(in srgb, var(--capture) 25%, transparent); }
-#bc-phase { font-weight: 700; }
 
-/* ---------- board ---------- */
+/* ---------- live counters (HUD) right above the board ---------- */
+.bc-hud {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.hud-card {
+  --hud-ink: var(--bagh-ink);
+  --hud-bg: var(--bagh-bg);
+  min-width: 0;
+  padding: 6px 10px 7px;
+  border-radius: 14px;
+  border: 2px solid color-mix(in srgb, var(--hud-ink) 30%, transparent);
+  background: var(--hud-bg);
+  color: var(--hud-ink);
+  text-align: left;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: "value label" "value bar" "note note";
+  align-items: center;
+  column-gap: 8px;
+  row-gap: 3px;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+.hud-card p { margin: 0; }
+.hud-label {
+  grid-area: label;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hud-value { grid-area: value; line-height: 1; white-space: nowrap; }
+.hud-value strong { font-size: 2rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.hud-of { font-size: 0.85rem; font-weight: 700; opacity: 0.7; }
+.hud-note {
+  grid-area: note;
+  font-size: 0.74rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.85;
+}
+
+/* 20 pips: solid = still to place, hollow = on the board, red = captured */
+.hud-pips, .hud-slots { grid-area: bar; }
+.hud-pips { display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; }
+.hud-pips i {
+  height: 7px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--hud-ink) 18%, transparent);
+  transition: background 0.25s;
+}
+.hud-pips i.left { background: var(--hud-ink); }
+.hud-pips i.lost { background: var(--capture); }
+
+/* 5 capture slots fill up with goats as tigers take them */
+.hud-slots { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; }
+.hud-slots i {
+  aspect-ratio: 1;
+  max-height: 24px;
+  border-radius: 50%;
+  border: 2px dashed color-mix(in srgb, var(--hud-ink) 35%, transparent);
+  display: grid;
+  place-items: center;
+  font-style: normal;
+  font-size: 0.72rem;
+  line-height: 1;
+}
+.hud-slots i.taken {
+  border: 2px solid var(--capture);
+  background: color-mix(in srgb, var(--capture) 16%, var(--card));
+}
+.hud-slots i.taken::before { content: "🐐"; }
+.hud-slots i.new { animation: slot-in 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.4); }
+@keyframes slot-in { from { transform: scale(2.2); opacity: 0; } }
+
+.hud-capture { --hud-ink: var(--text); --hud-bg: var(--card); border-color: var(--line); }
+
+/* Warnings: amber, then red, as goats run short or captures pile up */
+.hud-card[data-level="low"] {
+  --hud-ink: var(--warn-ink);
+  --hud-bg: var(--warn-bg);
+  border-color: var(--warn-ink);
+}
+.hud-card[data-level="critical"] {
+  --hud-ink: var(--capture);
+  --hud-bg: color-mix(in srgb, var(--capture) 12%, var(--card));
+  border-color: var(--capture);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--capture) 18%, transparent);
+}
+.hud-place[data-level="done"] { opacity: 0.9; }
+.hud-card.flash { animation: hud-flash 0.6s ease-out; }
+@keyframes hud-flash {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.05); box-shadow: 0 0 0 6px color-mix(in srgb, var(--hud-ink) 30%, transparent); }
+  100% { transform: scale(1); }
+}
+
+.bc-status { font-size: 1.05rem; min-height: 1.4em; }
+
+/* ---------- board: fills all the space left, centred ---------- */
+.bc .board-wrap { min-height: 260px; }
+#bagh-chal { padding-left: max(8px, env(safe-area-inset-left, 0px)); padding-right: max(8px, env(safe-area-inset-right, 0px)); padding-block: 8px; }
 .bc-board {
   width: min(100%, 58dvh);
   width: min(100cqw, 100cqh);
@@ -132,6 +213,7 @@
 
 /* ---------- actions ---------- */
 .bc-actions { grid-template-columns: repeat(3, 1fr); }
+.bc-actions button { min-height: 44px; }
 #bc-restart { background: var(--tiger-strong); border-color: var(--tiger-strong); color: #fff; }
 .bc-actions button:disabled { opacity: 0.45; cursor: default; }
 
@@ -174,5 +256,11 @@
 
 @media (prefers-reduced-motion: reduce) {
   .bc-piece, .bc-piece-body { transition: none; }
-  .bc-piece-body.enter, .bc-hint.place, .bc-hint.capture, .modal, .modal-card { animation: none; }
+  .bc-piece-body.enter, .bc-hint.place, .bc-hint.capture, .modal, .modal-card,
+  .hud-card.flash, .hud-slots i.new { animation: none; }
+}
+
+/* Short phone screens: drop the brand line so the board gets the room */
+@media (max-height: 760px) {
+  .bc .brand { display: none; }
 }

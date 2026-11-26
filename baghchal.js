@@ -139,9 +139,7 @@ const BC_STORAGE_KEY = "baghchal-state";
     gameEl.classList.toggle("cpu-mode", isCpu());
     const placing = state.toPlace > 0;
 
-    $("bc-phase").textContent = placing ? "Placement" : "Movement";
-    $("bc-to-place").textContent = `${state.toPlace}/${GOATS_TOTAL}`;
-    $("bc-captured").textContent = `${state.captured}/${CAPTURES_TO_WIN}`;
+    renderHud(placing);
     for (const k of Object.keys(scores)) $(`bc-score-${k}`).textContent = scores[k];
 
     statusEl.textContent = statusText();
@@ -180,6 +178,84 @@ const BC_STORAGE_KEY = "baghchal-state";
     $("bc-undo").disabled = state.over || history.length === 0;
     $("bc-draw").disabled = Boolean(state.over);
   }
+
+  // ---------- live counters (goats left to place / goats captured) ----------
+
+  const placeCard = $("bc-place-card");
+  const captureCard = $("bc-capture-card");
+  const placePips = [];
+  const captureSlots = [];
+  for (let i = 0; i < GOATS_TOTAL; i++) {
+    const pip = document.createElement("i");
+    $("bc-place-pips").appendChild(pip);
+    placePips.push(pip);
+  }
+  for (let i = 0; i < CAPTURES_TO_WIN; i++) {
+    const slot = document.createElement("i");
+    $("bc-capture-slots").appendChild(slot);
+    captureSlots.push(slot);
+  }
+  let hudPrev = null; // last shown numbers, to flash a card only when it changes
+
+  // Goats run short: amber from 5 left, red from 2 left
+  const placeLevel = (n) => (n === 0 ? "done" : n <= 2 ? "critical" : n <= 5 ? "low" : "ok");
+  // Captures pile up: amber from 2, red from 3 (tigers are two away from winning)
+  const captureLevel = (c) => (c >= 3 ? "critical" : c >= 2 ? "low" : "ok");
+
+  function renderHud(placing) {
+    const left = state.toPlace;
+    const caught = state.captured;
+    const onBoard = state.board.filter((v) => v === GOAT).length;
+
+    $("bc-to-place").textContent = placing ? left : onBoard;
+    $("bc-place-of").textContent = placing ? `/${GOATS_TOTAL}` : "";
+    $("bc-place-label").textContent = placing ? "🐐 To place" : "🐐 On board";
+    placeCard.dataset.level = placeLevel(left);
+    placePips.forEach((p, i) => {
+      // remaining goats are solid; placed ones are hollow; captured ones are red
+      p.className = i < left ? "left" : i >= GOATS_TOTAL - caught ? "lost" : "";
+    });
+    let note;
+    if (!placing) note = "All placed: now move";
+    else if (left === 1) note = "⚠️ Last goat!";
+    else if (left <= 5) note = `⚠️ Only ${left} left`;
+    else note = "Placement phase";
+    $("bc-place-note").textContent = note;
+
+    $("bc-captured").textContent = caught;
+    captureCard.dataset.level = captureLevel(caught);
+    captureSlots.forEach((s, i) => {
+      s.classList.toggle("taken", i < caught);
+      if (i >= caught) s.classList.remove("new");
+    });
+    const need = CAPTURES_TO_WIN - caught;
+    $("bc-capture-note").textContent =
+      need <= 0 ? "Tigers got 5: game over" :
+      need === 1 ? "⚠️ 1 more and tigers win!" :
+      caught === 0 ? `Tigers need ${CAPTURES_TO_WIN} to win` :
+      `Tigers need ${need} more`;
+
+    // Flash a card when its number changes, and announce it for screen readers
+    if (hudPrev) {
+      if (caught > hudPrev.caught) {
+        flash(captureCard);
+        const slot = captureSlots[caught - 1];
+        if (slot) { slot.classList.remove("new"); void slot.offsetWidth; slot.classList.add("new"); }
+        announce(`Goat captured! ${caught} of ${CAPTURES_TO_WIN}.`);
+      } else if (left < hudPrev.left && left <= 5) {
+        flash(placeCard);
+        announce(left ? `${left} goats left to place.` : "All goats placed. Now move them.");
+      }
+    }
+    hudPrev = { left, caught };
+  }
+
+  function flash(card) {
+    card.classList.remove("flash");
+    void card.offsetWidth; // restart the animation
+    card.classList.add("flash");
+  }
+  function announce(text) { $("bc-live").textContent = text; }
 
   function statusText() {
     if (state.over) {
@@ -241,6 +317,7 @@ const BC_STORAGE_KEY = "baghchal-state";
     state = BC.newGame();
     history = [];
     selected = null;
+    hudPrev = null;
     rebuildPieces();
     render();
     maybeCpu();
@@ -253,6 +330,7 @@ const BC_STORAGE_KEY = "baghchal-state";
     // vs computer: go back to the player's own turn
     while (isCpu() && state.turn !== humanSide() && history.length) state = history.pop();
     selected = null;
+    hudPrev = null;
     rebuildPieces();
     render();
     maybeCpu();

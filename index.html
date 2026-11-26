@@ -214,33 +214,44 @@
         <button class="rules-btn" id="bc-rules" aria-label="How to play">?</button>
       </header>
 
-      <div class="scoreboard">
+      <div class="scoreboard bc-scores" aria-label="Series score">
         <div class="score tiger"><span>🐅 Tiger</span><strong id="bc-score-tiger">0</strong></div>
         <div class="score draw"><span>Draws</span><strong id="bc-score-draw">0</strong></div>
         <div class="score goat"><span>🐐 Goat</span><strong id="bc-score-goat">0</strong></div>
       </div>
 
-      <fieldset class="seg mode-seg" id="bc-mode">
-        <legend class="sr-only">Mode</legend>
-        <label><input type="radio" name="bc-mode" value="pvp"><span>👥 2 Players</span></label>
-        <label><input type="radio" name="bc-mode" value="cpu" checked><span>🤖 vs Computer</span></label>
-      </fieldset>
+      <div class="bc-settings">
+        <fieldset class="seg mode-seg" id="bc-mode">
+          <legend class="sr-only">Mode</legend>
+          <label><input type="radio" name="bc-mode" value="pvp"><span>👥 2P</span></label>
+          <label><input type="radio" name="bc-mode" value="cpu" checked><span>🤖 vs CPU</span></label>
+        </fieldset>
 
-      <fieldset class="side-pick cpu-only" id="bc-side">
-        <legend class="side-legend">You play as</legend>
-        <div class="seg side-seg">
-          <label><input type="radio" name="bc-side" value="G" checked><span><b class="side-icon">🐐</b> Goats <small>move first</small></span></label>
-          <label><input type="radio" name="bc-side" value="T"><span><b class="side-icon">🐅</b> Tigers <small>hunt 5</small></span></label>
-        </div>
-      </fieldset>
-
-      <p id="bc-status" class="status" aria-live="polite">Goat's turn</p>
-
-      <div class="bc-info">
-        <span class="chip" id="bc-phase">Placement</span>
-        <span class="chip">To place <strong id="bc-to-place">20/20</strong></span>
-        <span class="chip danger">Captured <strong id="bc-captured">0/5</strong></span>
+        <fieldset class="seg side-seg cpu-only" id="bc-side">
+          <legend class="sr-only">You play as</legend>
+          <label><input type="radio" name="bc-side" value="G" checked><span>🐐 Goats</span></label>
+          <label><input type="radio" name="bc-side" value="T"><span>🐅 Tigers</span></label>
+        </fieldset>
       </div>
+
+      <!-- Live game counters, right above the board where the eye already is -->
+      <div class="bc-hud">
+        <div class="hud-card hud-place" id="bc-place-card" data-level="ok">
+          <p class="hud-label" id="bc-place-label">🐐 To place</p>
+          <p class="hud-value"><strong id="bc-to-place">20</strong><span class="hud-of" id="bc-place-of">/20</span></p>
+          <div class="hud-pips" id="bc-place-pips" aria-hidden="true"></div>
+          <p class="hud-note" id="bc-place-note">Placement phase</p>
+        </div>
+        <div class="hud-card hud-capture" id="bc-capture-card" data-level="ok">
+          <p class="hud-label">🐐 Captured</p>
+          <p class="hud-value"><strong id="bc-captured">0</strong><span class="hud-of">/5</span></p>
+          <div class="hud-slots" id="bc-capture-slots" aria-hidden="true"></div>
+          <p class="hud-note" id="bc-capture-note">Tigers need 5 to win</p>
+        </div>
+      </div>
+      <p class="sr-only" id="bc-live" aria-live="polite"></p>
+
+      <p id="bc-status" class="status bc-status">Goat's turn</p>
 
       <div class="board-wrap">
         <svg id="bc-board" class="bc-board" viewBox="0 0 100 100" role="group" aria-label="Bagh Chal board"></svg>
