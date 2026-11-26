@@ -192,28 +192,25 @@
         <button class="rules-btn" id="bc-rules" aria-label="How to play">?</button>
       </header>
 
-      <div class="controls">
-        <div class="field">
-          <label for="bc-mode">Mode</label>
-          <select id="bc-mode">
-            <option value="pvp">2 Players</option>
-            <option value="cpu">vs Computer</option>
-          </select>
-        </div>
-        <div class="field cpu-only">
-          <label for="bc-side">You play</label>
-          <select id="bc-side">
-            <option value="G">🐐 Goats</option>
-            <option value="T">🐅 Tigers</option>
-          </select>
-        </div>
-      </div>
-
       <div class="scoreboard">
         <div class="score tiger"><span>🐅 Tiger</span><strong id="bc-score-tiger">0</strong></div>
         <div class="score draw"><span>Draws</span><strong id="bc-score-draw">0</strong></div>
         <div class="score goat"><span>🐐 Goat</span><strong id="bc-score-goat">0</strong></div>
       </div>
+
+      <fieldset class="seg mode-seg" id="bc-mode">
+        <legend class="sr-only">Mode</legend>
+        <label><input type="radio" name="bc-mode" value="pvp"><span>👥 2 Players</span></label>
+        <label><input type="radio" name="bc-mode" value="cpu" checked><span>🤖 vs Computer</span></label>
+      </fieldset>
+
+      <fieldset class="side-pick cpu-only" id="bc-side">
+        <legend class="side-legend">You play as</legend>
+        <div class="seg side-seg">
+          <label><input type="radio" name="bc-side" value="G" checked><span><b class="side-icon">🐐</b> Goats <small>move first</small></span></label>
+          <label><input type="radio" name="bc-side" value="T"><span><b class="side-icon">🐅</b> Tigers <small>hunt 5</small></span></label>
+        </div>
+      </fieldset>
 
       <p id="bc-status" class="status" aria-live="polite">Goat's turn</p>
 

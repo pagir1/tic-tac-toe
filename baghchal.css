@@ -22,6 +22,50 @@
   color: var(--bagh-ink);
 }
 
+/* ---------- "You play as" picker: the main choice vs the computer ---------- */
+.side-pick {
+  margin: 0;
+  padding: 10px;
+  border: 2px solid color-mix(in srgb, var(--bagh-ink) 35%, transparent);
+  border-radius: 16px;
+  background: var(--bagh-bg);
+  min-width: 0;
+}
+.side-legend {
+  float: left; /* keeps the legend inside the box */
+  width: 100%;
+  margin: 0 0 8px;
+  padding: 0;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bagh-ink);
+  text-align: left;
+}
+.side-seg { clear: both; border-color: transparent; background: transparent; padding: 0; gap: 8px; }
+.side-seg span {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 1.05rem;
+}
+.side-seg small { flex-basis: 100%; margin-top: -6px; font-size: 0.72rem; font-weight: 600; opacity: 0.75; }
+.side-icon { font-size: 1.5rem; font-weight: 400; line-height: 1; }
+.side-seg input:checked + span {
+  background: var(--tiger-strong);
+  border-color: var(--tiger-strong);
+  color: #fff;
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--tiger-strong) 40%, transparent);
+  transform: translateY(-1px);
+}
+
 .score.tiger strong { color: var(--tiger); }
 .score.goat strong { color: var(--text); }
 

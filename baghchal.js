@@ -14,8 +14,9 @@ const BC_STORAGE_KEY = "baghchal-state";
   const $ = (id) => document.getElementById(id);
   const gameEl = document.querySelector("#bagh-chal .game");
   const svg = $("bc-board");
-  const modeEl = $("bc-mode");
-  const sideEl = $("bc-side");
+  // Tab groups (radioGroup comes from script.js); defaults in the HTML: vs Computer, Goats
+  const modeEl = radioGroup("bc-mode");
+  const sideEl = radioGroup("bc-side");
   const statusEl = $("bc-status");
   const overModal = $("bc-over");
   const helpModal = $("bc-help");
