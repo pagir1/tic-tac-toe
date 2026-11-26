@@ -240,20 +240,25 @@ const MR_STORAGE_KEY = "momorush-state";
     return "Customers are hungrier!";
   }
 
-  // Big full-screen "LEVEL N" announcement. The clock is held while it shows.
+  // "LEVEL N" announcement.
+  // Levels 1-2: big, full-screen, and the clock is held while it shows.
+  // Level 3+: a quick flash of the number over the game; the clock keeps running.
   const LEVEL_SHOW_MS = 1700;
+  const LEVEL_QUICK_MS = 900;
   let holdUntil = 0;
   let levelToken = 0;
   function showLevel(level, then) {
     const el = $("mr-levelup");
     const token = ++levelToken;
+    const quick = level >= 3;
     $("mr-lv-kicker").textContent = level === 1 ? "Get ready" : "Level up!";
-    $("mr-lv-title").textContent = `Level ${level}`;
+    $("mr-lv-title").innerHTML = `<small class="lv-word">Level</small> <b class="lv-num">${level}</b>`;
     $("mr-lv-sub").textContent = levelMessage(level);
+    el.classList.toggle("quick", quick);
     el.hidden = false;
     restartAnim(el, "show");
-    const ms = reduceMotion ? 1200 : LEVEL_SHOW_MS;
-    holdUntil = performance.now() + ms;
+    const ms = quick ? LEVEL_QUICK_MS : reduceMotion ? 1200 : LEVEL_SHOW_MS;
+    holdUntil = quick ? 0 : performance.now() + ms;
     setTimeout(() => {
       if (token !== levelToken) return;
       el.hidden = true;

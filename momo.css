@@ -670,6 +670,28 @@
   filter: drop-shadow(0 4px 0 color-mix(in srgb, var(--momo-strong) 25%, transparent));
 }
 .lv-sub { max-width: 90%; font-size: 1.15rem; font-weight: 800; color: var(--text); }
+.lv-word, .lv-num { font: inherit; }
+
+/* level 3+: quick flash over the game, no backdrop; "Level" faded, the number clear */
+.mr-levelup.quick {
+  background: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.mr-levelup.quick.show { animation: lv-quick 0.9s ease-out forwards; }
+.mr-levelup.quick.show .lv-title { animation: lv-pop-quick 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.4); }
+@keyframes lv-quick { 0% { opacity: 0; } 12%, 62% { opacity: 1; } 100% { opacity: 0; transform: translateY(-24px); } }
+@keyframes lv-pop-quick { from { transform: scale(1.8); } }
+.mr-levelup.quick .lv-kicker { display: none; }
+.mr-levelup.quick .lv-title { filter: drop-shadow(0 0 8px var(--bg)) drop-shadow(0 0 2px var(--bg)); }
+.mr-levelup.quick .lv-word { font-size: 0.42em; opacity: 0.45; vertical-align: middle; }
+.mr-levelup.quick .lv-sub {
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--card);
+  font-size: 0.95rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
 
 /* bottom area: level progress above a smaller steamer */
 .mr-kitchen { justify-content: center; gap: 14px; }
