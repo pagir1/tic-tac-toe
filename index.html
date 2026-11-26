@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nepaligamesus</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="game">
+    <p class="brand">Nepaligamesus</p>
+    <h1>Tic Tac Toe</h1>
+
+    <div class="controls">
+      <label for="mode">Mode</label>
+      <select id="mode">
+        <option value="pvp">2 Players</option>
+        <option value="cpu">vs Computer</option>
+      </select>
+      <label for="difficulty" class="cpu-only">Difficulty</label>
+      <select id="difficulty" class="cpu-only">
+        <option value="easy">Easy</option>
+        <option value="medium" selected>Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+    </div>
+
+    <div class="scoreboard">
+      <div class="score x"><span>X</span><strong id="score-x">0</strong></div>
+      <div class="score draw"><span>Draws</span><strong id="score-draw">0</strong></div>
+      <div class="score o"><span>O</span><strong id="score-o">0</strong></div>
+    </div>
+
+    <p id="status" class="status" aria-live="polite">X's turn</p>
+
+    <div id="board" class="board" role="grid" aria-label="Tic Tac Toe board"></div>
+
+    <div class="actions">
+      <button id="restart">New Round</button>
+      <button id="reset" class="secondary">Reset Scores</button>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
