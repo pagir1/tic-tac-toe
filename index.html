@@ -8,103 +8,111 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Nepaligamesus">
-  <title>Nepaligamesus</title>
+  <title>nepaligames.</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="baghchal.css">
   <link rel="stylesheet" href="momo.css">
+  <link rel="stylesheet" href="account.css">
 </head>
 <body>
   <!-- ================= HOME ================= -->
-  <section id="home" class="view home-view" aria-label="Game library">
-    <div class="sky" aria-hidden="true">
-      <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
-    </div>
-
+  <section id="home" class="view home-view ng-dark" aria-label="Nepaligames home">
     <div class="home">
-      <header class="hero">
-        <div class="hero-row">
-          <p class="brand">Nepaligamesus</p>
-          <p class="clock" id="clock">--:--</p>
+      <header class="ng-header">
+        <div class="ng-brand">
+          <p class="ng-logo">nepali<span>games</span>.</p>
+          <p class="ng-tag">Your little piece of Nepal 🇳🇵</p>
         </div>
-        <h1 id="greeting">Namaste! Ready to play?</h1>
-        <div class="stats">
-          <div class="stat"><strong id="stat-rounds">0</strong><span>Rounds played</span></div>
-          <div class="stat"><strong id="stat-live">0/7</strong><span>Games live</span></div>
-          <div class="stat"><strong id="stat-momobest">0</strong><span>🥟 Momo best</span></div>
-          <div class="stat"><strong id="stat-xo">0–0</strong><span>X–O wins</span></div>
-          <div class="stat"><strong id="stat-tg">0–0</strong><span>🐅–🐐 wins</span></div>
-          <div class="stat"><strong id="stat-served">0</strong><span>Momos served</span></div>
-        </div>
+        <button class="ng-avatar" id="ng-avatar" aria-label="Your profile"><span id="ng-avatar-letter">👤</span></button>
       </header>
 
-      <h2 class="section-title">Pick a game</h2>
+      <div class="ng-banner" id="ng-banner" hidden>
+        <button class="ng-banner-link" id="ng-banner-link">🕓 Guest scores disappear in <span id="ng-banner-days">4 days</span>. <b>Save them →</b></button>
+        <button class="ng-banner-close" id="ng-banner-close" aria-label="Hide for today">×</button>
+      </div>
 
-      <div class="tiles">
-        <button class="tile live t-ttt" data-game="tic-tac-toe" aria-label="Play Tic Tac Toe">
-          <span class="badge now">Play now</span>
-          <span class="mini-board" id="mini-board" aria-hidden="true">
-            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-          </span>
-          <span class="live-text">
-            <span class="tile-name">Tic Tac Toe</span>
-            <span class="tile-sub">2 players or vs computer</span>
-            <span class="play-pill">▶ Play</span>
-          </span>
+      <div class="ng-greet">
+        <div class="ng-greet-text">
+          <h1 class="ng-hello"><span class="ng-hello-pre" id="ng-hello-pre">Namaste</span><span class="ng-hello-name" id="ng-hello-name"></span><span class="ng-hello-end">! 🙏</span></h1>
+          <p class="ng-greet-sub">Ready to take the crown?</p>
+        </div>
+        <span class="ng-streak" id="ng-streak" hidden>🔥 <b id="ng-streak-text">1 day</b></span>
+      </div>
+
+      <section class="ng-hero" id="ng-hero" data-state="loading" aria-labelledby="ng-hero-kicker">
+        <p class="ng-hero-kicker" id="ng-hero-kicker">👑 This week's champion</p>
+        <p class="ng-hero-name" id="ng-hero-name"><span class="skel wide"></span></p>
+        <p class="ng-hero-pts" id="ng-hero-pts"><span class="skel"></span></p>
+        <button class="ng-hero-btn" id="ng-hero-btn" hidden>Beat them →</button>
+      </section>
+
+      <section class="ng-continue" id="ng-continue" aria-labelledby="ng-continue-title" hidden>
+        <h2 class="ng-h2" id="ng-continue-title">Continue playing</h2>
+        <button class="ng-continue-row" id="ng-continue-row">
+          <span class="ng-continue-icon" id="ng-continue-icon" aria-hidden="true"></span>
+          <span class="ng-continue-text"><b id="ng-continue-name">Bagh Chal</b><small id="ng-continue-sub"></small></span>
+          <span class="ng-continue-play" aria-hidden="true">▶</span>
         </button>
+      </section>
 
-        <button class="tile ready t-bagh" data-game="bagh-chal" aria-label="Play Bagh Chal">
-          <span class="badge ready-badge">Play now</span>
-          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+      <section aria-labelledby="ng-games-title">
+        <h2 class="ng-h2" id="ng-games-title">Popular games</h2>
+        <div class="ng-games">
+          <button class="ng-card t-ttt" data-game="tic-tac-toe" data-board="tic-tac-toe" aria-label="Play Tic Tac Toe">
+            <span class="ng-card-icon"><span class="mini-board" id="mini-board" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></span>
+            <span class="ng-card-body">
+              <span class="ng-card-name">Tic Tac Toe</span>
+              <span class="ng-card-sub">Beat the computer</span>
+              <span class="ng-crown"><span class="skel"></span></span>
+              <span class="ng-you"></span>
+              <span class="ng-nudge"></span>
+            </span>
+            <span class="ng-card-play" aria-hidden="true">▶</span>
+          </button>
+          <button class="ng-card t-bagh" data-game="bagh-chal" data-board="bagh-chal" aria-label="Play Bagh Chal">
+            <span class="ng-card-icon"><svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
             <path d="M8 8h48v48H8zM8 20h48M8 32h48M8 44h48M20 8v48M32 8v48M44 8v48M8 8l48 48M56 8 8 56M32 8 8 32l24 24 24-24z" fill="none" stroke="currentColor" stroke-width="2"/>
             <circle cx="8" cy="8" r="5" fill="currentColor"/><circle cx="56" cy="8" r="5" fill="currentColor"/>
             <circle cx="8" cy="56" r="5" fill="currentColor"/><circle cx="56" cy="56" r="5" fill="currentColor"/>
             <circle cx="32" cy="32" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
-          </svg>
-          <span class="tile-name">Bagh Chal</span>
-          <span class="tile-sub">Tigers vs goats</span>
-        </button>
-
-        <button class="tile ready t-momo" data-game="momo-rush" aria-label="Play Momo Rush">
-          <span class="badge ready-badge">Play now</span>
-          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+          </svg></span>
+            <span class="ng-card-body">
+              <span class="ng-card-name">Bagh Chal</span>
+              <span class="ng-card-sub">Tigers vs goats</span>
+              <span class="ng-crown"><span class="skel"></span></span>
+              <span class="ng-you"></span>
+              <span class="ng-nudge"></span>
+            </span>
+            <span class="ng-card-play" aria-hidden="true">▶</span>
+          </button>
+          <button class="ng-card t-momo ng-card-local" data-game="momo-rush" aria-label="Play Momo Rush">
+            <span class="ng-card-icon"><svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
             <path class="steam" d="M24 15c-3-3 3-5 0-9M32 13c-3-3 3-5 0-9M40 15c-3-3 3-5 0-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".6"/>
             <path d="M8 44c0-13 11-24 24-24s24 11 24 24c0 4-4 7-8 7H16c-4 0-8-3-8-7z" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="2.5"/>
             <path d="M32 21v9M24 23l3 8M40 23l-3 8M17 29l6 5M47 29l-6 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-          </svg>
-          <span class="tile-name">Momo Rush</span>
-          <span class="tile-sub">Fold fast, serve hot</span>
-        </button>
-
-        <button class="tile soon t-langur" data-name="Langur Burja">
-          <span class="badge">Coming soon</span>
-          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+          </svg></span>
+            <span class="ng-card-body">
+              <span class="ng-card-name">Momo Rush</span>
+              <span class="ng-card-sub">Fold fast, serve hot</span>
+              <span class="ng-you" id="ng-momo-best">🏆 Your best: 0</span>
+            </span>
+            <span class="ng-card-play" aria-hidden="true">▶</span>
+          </button>
+        </div>
+        <div class="ng-soon">
+          <button class="ng-soon-card t-langur" data-name="Langur Burja">
+            <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
             <rect x="6" y="18" width="28" height="28" rx="6" fill="none" stroke="currentColor" stroke-width="2.5" transform="rotate(-12 20 32)"/>
             <text x="20" y="38" text-anchor="middle" font-size="16" fill="currentColor" transform="rotate(-12 20 32)">♥</text>
             <rect x="30" y="14" width="28" height="28" rx="6" fill="currentColor" opacity=".9" transform="rotate(10 44 28)"/>
             <text x="44" y="34" text-anchor="middle" font-size="16" fill="var(--tile-bg)" transform="rotate(10 44 28)">♠</text>
           </svg>
-          <span class="tile-name">Langur Burja</span>
-          <span class="tile-sub">Nepali dice luck</span>
-        </button>
-
-        <button class="tile soon t-kite" data-name="Kite Fight">
-          <span class="badge">Coming soon</span>
-          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
-            <path d="M32 4 50 24 32 42 14 24z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
-            <path d="M32 4v38M14 24h36" stroke="currentColor" stroke-width="1.5" opacity=".7"/>
-            <g class="kite-tail" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <path d="M32 42c-4 5 4 8 0 13s4 6 2 8"/>
-              <path d="M28 50l4 1 4-1M29 58l4 1 4-1"/>
-            </g>
-          </svg>
-          <span class="tile-name">Kite Fight</span>
-          <span class="tile-sub">Dashain changa chet</span>
-        </button>
-
-        <button class="tile soon t-ludo" data-name="Ludo">
-          <span class="badge">Coming soon</span>
-          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <span class="ng-soon-name">Langur Burja</span>
+            <span class="ng-soon-tag">Coming soon</span>
+          </button>
+          <button class="ng-soon-card t-ludo" data-name="Ludo">
+            <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
             <rect x="6" y="6" width="52" height="52" rx="6" fill="none" stroke="currentColor" stroke-width="2.5"/>
             <rect x="10" y="10" width="18" height="18" rx="3" fill="currentColor"/>
             <rect x="36" y="36" width="18" height="18" rx="3" fill="currentColor"/>
@@ -112,13 +120,11 @@
             <rect x="10" y="36" width="18" height="18" rx="3" fill="currentColor" opacity=".35"/>
             <path d="M32 26l6 6-6 6-6-6z" fill="currentColor"/>
           </svg>
-          <span class="tile-name">Ludo</span>
-          <span class="tile-sub">Race your 4 tokens</span>
-        </button>
-
-        <button class="tile soon t-carrom" data-name="Carrom">
-          <span class="badge">Coming soon</span>
-          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <span class="ng-soon-name">Ludo</span>
+            <span class="ng-soon-tag">Coming soon</span>
+          </button>
+          <button class="ng-soon-card t-carrom" data-name="Carrom">
+            <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
             <rect x="6" y="6" width="52" height="52" rx="5" fill="none" stroke="currentColor" stroke-width="3"/>
             <g fill="currentColor">
               <circle cx="12" cy="12" r="4"/><circle cx="52" cy="12" r="4"/><circle cx="12" cy="52" r="4"/><circle cx="52" cy="52" r="4"/>
@@ -127,12 +133,21 @@
             </g>
             <circle cx="32" cy="32" r="12" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".6"/>
           </svg>
-          <span class="tile-name">Carrom</span>
-          <span class="tile-sub">Flick &amp; pocket</span>
-        </button>
-      </div>
+            <span class="ng-soon-name">Carrom</span>
+            <span class="ng-soon-tag">Coming soon</span>
+          </button>
+        </div>
+      </section>
 
-      <!-- Sports hub link: a plain link, not a .tile, so the game counts and tile scripts ignore it -->
+      <section class="ng-lb" aria-labelledby="ng-lb-title">
+        <h2 class="ng-h2" id="ng-lb-title">Weekly leaderboard <small>Resets Monday</small></h2>
+        <ol class="ng-board" id="ng-board" data-state="loading">
+          <li class="ng-row skel-row"><span class="skel"></span></li>
+          <li class="ng-row skel-row"><span class="skel"></span></li>
+          <li class="ng-row skel-row"><span class="skel"></span></li>
+        </ol>
+      </section>
+
       <a class="sports-card" href="https://pagir1.github.io/sports/" aria-label="Open Sports: NBA predictions and more">
         <span class="sports-icon" aria-hidden="true">
           <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
@@ -148,9 +163,8 @@
         <span class="sports-go" aria-hidden="true">›</span>
       </a>
 
-      <p class="footnote">More games are on the way. Scores are saved on this device.</p>
-
       <footer class="site-footer">
+        <p><a href="privacy.html">Privacy</a></p>
         <p>© 2026 NepaliGamesUS. All rights reserved.</p>
       </footer>
     </div>
@@ -189,6 +203,8 @@
         <label><input type="radio" name="difficulty" value="hard"><span>Hard</span></label>
       </fieldset>
 
+      <p class="points-note" id="ttt-points-note" hidden>Play Medium or Hard to earn points</p>
+
       <p id="status" class="status" aria-live="polite">X's turn</p>
 
       <div class="board-wrap">
@@ -200,6 +216,19 @@
         <button id="reset" class="secondary">Reset Scores</button>
       </div>
     </main>
+
+    <!-- Round over (vs Computer) -->
+    <div class="modal" id="ttt-over" role="dialog" aria-modal="true" aria-labelledby="ttt-over-title" hidden>
+      <div class="modal-card ttt-over-card">
+        <p class="modal-icon" id="ttt-over-icon">🎉</p>
+        <h2 id="ttt-over-title">You win!</h2>
+        <div class="ng-result" id="ttt-result"></div>
+        <div class="modal-actions">
+          <button id="ttt-again" class="primary">Play again</button>
+          <button id="ttt-home" class="secondary">Back to games</button>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- ================= BAGH CHAL ================= -->
@@ -270,6 +299,7 @@
         <p class="modal-icon" id="bc-over-icon">🐅</p>
         <h2 id="bc-over-title">Tigers win!</h2>
         <p id="bc-over-reason" class="modal-sub">5 goats captured</p>
+        <div class="ng-result" id="bc-result"></div>
         <div class="modal-actions">
           <button id="bc-again" class="primary">Play again</button>
           <button id="bc-home" class="secondary">Back to games</button>
@@ -442,11 +472,101 @@
     <div class="mr-banner" id="mr-banner" role="status" hidden></div>
   </section>
 
+  <!-- ================= ACCOUNT POPUPS ================= -->
+  <div class="modal ng-modal ng-dark" id="ng-name" role="dialog" aria-modal="true" aria-labelledby="ng-name-title" hidden>
+    <form class="modal-card ng-sheet" id="ng-name-form" novalidate>
+      <button class="ng-x" type="button" data-close aria-label="Close">×</button>
+      <p class="modal-icon">🙏</p>
+      <h2 id="ng-name-title">What should we call you?</h2>
+      <label class="sr-only" for="ng-name-input">Your name</label>
+      <input class="ng-input" id="ng-name-input" maxlength="16" autocomplete="nickname" autocapitalize="words"
+             enterkeyhint="go" spellcheck="false" placeholder="Your name">
+      <p class="ng-msg" id="ng-name-msg" role="alert"></p>
+      <button class="ng-suggest" type="button" id="ng-name-suggest" hidden>How about <b></b>?</button>
+      <button class="ng-primary" type="submit" id="ng-name-go">Let's play</button>
+      <button class="ng-link" type="button" id="ng-name-signin">Have an account? Sign in</button>
+    </form>
+  </div>
+
+  <div class="modal ng-modal ng-dark" id="ng-signin" role="dialog" aria-modal="true" aria-labelledby="ng-signin-title" hidden>
+    <div class="modal-card ng-sheet">
+      <button class="ng-x" type="button" data-close aria-label="Close">×</button>
+      <p class="modal-icon">🏆</p>
+      <h2 id="ng-signin-title">Save your scores forever</h2>
+      <p class="modal-sub" id="ng-signin-sub">Keep your name and scores, and play on any device.</p>
+
+      <div class="ng-step" id="ng-step-choose">
+        <button class="ng-google" id="ng-google" type="button">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>
+          Continue with Google
+        </button>
+        <button class="ng-link" id="ng-use-email" type="button">Use email instead</button>
+        <button class="ng-link" id="ng-use-phone" type="button" hidden>Use phone instead</button>
+      </div>
+
+      <form class="ng-step" id="ng-step-email" novalidate hidden>
+        <label class="ng-label" for="ng-email-input" id="ng-email-label">Your email</label>
+        <input class="ng-input" id="ng-email-input" type="email" inputmode="email" autocomplete="email"
+               autocapitalize="off" spellcheck="false" placeholder="you@example.com">
+        <button class="ng-primary" type="submit" id="ng-send-code">Send me a code</button>
+        <button class="ng-link" type="button" data-step="choose">← Back</button>
+      </form>
+
+      <form class="ng-step" id="ng-step-code" novalidate hidden>
+        <p class="ng-label">Enter the 6-digit code we sent to <b id="ng-code-to"></b></p>
+        <input class="ng-input ng-code" id="ng-code-input" inputmode="numeric" autocomplete="one-time-code"
+               maxlength="6" placeholder="••••••" aria-label="6-digit code">
+        <button class="ng-primary" type="submit" id="ng-verify">Verify</button>
+        <button class="ng-link" type="button" data-step="email">Use a different email or resend</button>
+      </form>
+
+      <p class="ng-msg" id="ng-signin-msg" role="alert"></p>
+      <p class="ng-fine">For ages 13+. We only save your name, email and scores. <a href="privacy.html">Privacy</a></p>
+    </div>
+  </div>
+
+  <div class="modal ng-modal ng-dark" id="ng-profile" role="dialog" aria-modal="true" aria-labelledby="ng-prof-name" hidden>
+    <div class="modal-card ng-sheet">
+      <button class="ng-x" type="button" data-close aria-label="Close">×</button>
+      <div class="ng-prof-head">
+        <span class="ng-avatar big" id="ng-prof-letter" aria-hidden="true">👤</span>
+        <div class="ng-prof-id">
+          <h2 class="ng-prof-name" id="ng-prof-name">Player</h2>
+          <button class="ng-link small" type="button" id="ng-prof-rename">Change name</button>
+        </div>
+      </div>
+      <p class="ng-prof-status" id="ng-prof-status"></p>
+      <div class="ng-week-card">
+        <p class="ng-week-title" id="ng-week-title">🔥 Play today to start a streak</p>
+        <ol class="ng-week" id="ng-week" aria-label="Days played this week"></ol>
+      </div>
+      <p class="ng-prof-best" id="ng-prof-best" hidden></p>
+      <div class="ng-prof-actions" id="ng-prof-actions">
+        <button class="ng-primary" type="button" id="ng-prof-save" hidden>Save my scores</button>
+        <button class="ng-secondary" type="button" id="ng-prof-signin" hidden>Sign in</button>
+        <button class="ng-secondary" type="button" id="ng-prof-signout" hidden>Sign out</button>
+        <button class="ng-danger" type="button" id="ng-prof-delete" hidden>Delete my account</button>
+      </div>
+      <div class="ng-confirm" id="ng-confirm" hidden>
+        <p><b>Delete your account?</b> This removes your name and all your scores. It can't be undone.</p>
+        <button class="ng-danger solid" type="button" id="ng-confirm-yes">Yes, delete everything</button>
+        <button class="ng-secondary" type="button" id="ng-confirm-no">Cancel</button>
+      </div>
+      <p class="ng-msg" id="ng-prof-msg" role="alert"></p>
+      <p class="ng-fine"><a href="privacy.html">Privacy</a></p>
+    </div>
+  </div>
+
+  <div class="ng-confetti" id="ng-confetti" aria-hidden="true"></div>
+
+  <script src="supabase-config.js"></script>
+  <script src="online.js"></script>
   <script src="script.js"></script>
   <script src="baghchal-logic.js"></script>
   <script src="baghchal.js"></script>
   <script src="momo-logic.js"></script>
   <script src="momo.js"></script>
+  <script src="account.js"></script>
   <script src="home.js"></script>
 </body>
 </html>

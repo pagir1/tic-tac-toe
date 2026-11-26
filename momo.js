@@ -147,6 +147,7 @@ const MR_STORAGE_KEY = "momorush-state";
 
   function finish() {
     running = false;
+    window.ngReportResult?.({ game: "momo-rush", mode: "solo" });
     const isBest = game.score > saved.best;
     saved.best = Math.max(saved.best, game.score);
     saved.played++;

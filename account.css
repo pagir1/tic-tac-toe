@@ -1,0 +1,199 @@
+/* Account popups (name, sign in, profile), points on result screens,
+   the Easy-mode note, and the champion confetti. Popups share .modal /
+   .modal-card from baghchal.css and are always dark (.ng-dark in home.css). */
+
+.ng-modal { z-index: 30; }
+.ng-sheet {
+  position: relative;
+  width: min(100%, 380px);
+  padding: 26px 20px 18px;
+  display: grid;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--text);
+}
+.ng-sheet h2 { font-size: 1.35rem; }
+.ng-sheet .modal-icon { font-size: 2.4rem; margin: 0; }
+.ng-sheet .modal-sub { margin: 0 0 4px; }
+.ng-x {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 40px;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 1.5rem;
+}
+.ng-step { display: grid; gap: 10px; }
+.ng-label { margin: 0; font-size: 0.9rem; color: var(--muted); text-align: left; overflow-wrap: anywhere; }
+.ng-label b { color: var(--text); }
+
+.ng-input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--card-2, #1e2330);
+  color: var(--text);
+  font: inherit;
+  font-size: 1.1rem; /* 16px+ keeps iOS from zooming */
+  text-align: center;
+  -webkit-user-select: text;
+  user-select: text;
+}
+.ng-input:focus { outline: 2px solid var(--pink, #f2557a); outline-offset: 1px; }
+.ng-code { font-size: 1.6rem; letter-spacing: 0.4em; font-variant-numeric: tabular-nums; }
+
+.ng-primary, .ng-secondary, .ng-danger, .ng-google {
+  width: 100%;
+  min-height: 52px;
+  border-radius: 14px;
+  font-weight: 800;
+}
+.ng-primary { border: 0; background: var(--pink, #f2557a); color: #fff; }
+.ng-secondary { background: transparent; border: 1px solid var(--line); color: var(--text); }
+.ng-danger { background: transparent; border: 1px solid rgba(248, 113, 113, 0.35); color: #fca5a5; font-weight: 700; }
+.ng-danger.solid { background: #dc2626; border-color: #dc2626; color: #fff; }
+.ng-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0;
+  background: #fff;
+  color: #1f1f1f;
+  font-size: 1.05rem;
+}
+.ng-google svg { width: 22px; height: 22px; }
+button.busy { opacity: 0.7; }
+.ng-link {
+  min-height: 40px;
+  padding: 0 6px;
+  border: 0;
+  background: none;
+  color: var(--hero-ink, #c4b5fd);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.ng-link.small { min-height: 32px; padding: 0; font-size: 0.85rem; }
+
+.ng-msg { margin: 0; min-height: 1.2em; font-size: 0.88rem; color: var(--muted); }
+.ng-msg:empty { display: none; }
+.ng-msg.error, #ng-name-msg, #ng-prof-msg { color: #fca5a5; }
+.ng-suggest {
+  justify-self: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px dashed rgba(196, 181, 253, 0.5);
+  background: rgba(196, 181, 253, 0.1);
+  color: var(--text);
+  font-size: 0.95rem;
+}
+.ng-suggest b { color: var(--hero-ink, #c4b5fd); }
+.ng-fine { margin: 4px 0 0; font-size: 0.75rem; color: var(--muted); }
+.ng-fine a { color: var(--text); }
+
+/* profile */
+.ng-prof-head { display: flex; align-items: center; gap: 12px; text-align: left; padding-right: 30px; }
+.ng-prof-id { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; }
+.ng-prof-name {
+  max-width: 100%;
+  margin: 0;
+  font-size: 1.3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ng-prof-status {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--card-2, #1e2330);
+  font-size: 0.9rem;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.ng-prof-status.guest { color: #fcd34d; }
+.ng-prof-status.saved { color: #86efac; }
+.ng-prof-best { margin: 0; font-size: 0.9rem; color: var(--gold-soft, #fde68a); text-align: left; }
+.ng-prof-actions, .ng-confirm { display: grid; gap: 8px; }
+.ng-confirm p { margin: 0; text-align: left; line-height: 1.4; }
+
+/* streak week (M..S) */
+.ng-week-card {
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--warm-bg, #2a2117);
+}
+.ng-week-title { margin: 0 0 10px; font-weight: 800; color: var(--warm-ink, #f5a524); text-align: left; }
+.ng-week { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.ng-week li { display: grid; justify-items: center; gap: 4px; }
+.ng-week small { font-size: 0.7rem; color: var(--muted); }
+.ng-week i {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-style: normal;
+  font-size: 0.8rem;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.08);
+}
+.ng-week .on i { background: var(--warm-ink, #f5a524); color: #1d1408; }
+.ng-week .future i { background: transparent; border: 1px dashed rgba(255, 255, 255, 0.15); }
+
+/* ---------- points on the result screens ---------- */
+.ng-result { display: grid; gap: 4px; margin: 0 0 16px; }
+.ng-result:empty { display: none; }
+.ng-result p { margin: 0; }
+.ng-result-crown {
+  margin-bottom: 6px !important;
+  padding: 10px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #2b1a00;
+  font-size: 1.2rem;
+  font-weight: 900;
+  animation: crown-in 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.4);
+}
+@keyframes crown-in { from { transform: scale(0.6); opacity: 0; } }
+.ng-result-pts { font-size: 2rem; font-weight: 900; color: #16a34a; line-height: 1.1; }
+.ng-result-pts.zero { font-size: 1.05rem; font-weight: 700; color: var(--muted); }
+.ng-result-note { font-size: 0.85rem; color: var(--muted); }
+.ng-result-status { font-size: 0.95rem; font-weight: 600; }
+.ng-result-status.warn { color: #d97706; }
+.ng-result-status.muted { color: var(--muted); }
+.ng-result-link { font-size: 0.9rem; color: var(--x); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .ng-result-pts:not(.zero) { color: #4ade80; }
+}
+
+/* Tic Tac Toe result popup + Easy note */
+#ttt-over .primary { background: var(--x); border-color: var(--x); color: #fff; font-weight: 700; }
+.points-note { margin: -4px 0 0; font-size: 0.82rem; color: var(--muted); }
+
+/* ---------- confetti ---------- */
+.ng-confetti { position: fixed; inset: 0; z-index: 50; pointer-events: none; overflow: hidden; }
+.ng-confetti i {
+  position: absolute;
+  top: -12px;
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  animation: confetti-fall linear forwards;
+}
+@keyframes confetti-fall {
+  to { transform: translate(var(--drift), 105vh) rotate(var(--spin)); opacity: 0.9; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ng-result-crown, .ng-confetti i { animation: none; }
+}

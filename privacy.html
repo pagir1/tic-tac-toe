@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1017">
+  <title>Privacy · nepaligames.</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #0d1017;
+      color: #f2f3f7;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.55;
+      -webkit-text-size-adjust: 100%;
+    }
+    main {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: max(20px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) 40px max(18px, env(safe-area-inset-left));
+    }
+    a { color: #c4b5fd; }
+    .back { display: inline-block; padding: 10px 0; font-weight: 600; text-decoration: none; }
+    .logo { margin: 18px 0 0; font-size: 1.4rem; font-weight: 800; }
+    .logo span { color: #f2557a; }
+    h1 { margin: 4px 0 18px; font-size: 1.8rem; }
+    h2 { margin: 26px 0 8px; font-size: 1.1rem; }
+    p, li { color: #d7dae3; }
+    ul { padding-left: 1.2rem; }
+    .card { padding: 14px 16px; border-radius: 16px; background: #171b25; border: 1px solid rgba(255,255,255,0.08); }
+    .muted { color: #9ba1b0; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="./">← Back to games</a>
+    <p class="logo">nepali<span>games</span>.</p>
+    <h1>Privacy</h1>
+
+    <div class="card">
+      <p><strong>Short version:</strong> we only save your player name, your email (if you sign in) and your game scores. Nothing else. No ads, no tracking, and we never sell anything.</p>
+    </div>
+
+    <h2>What we save</h2>
+    <ul>
+      <li><strong>Your name:</strong> the name you choose, shown on leaderboards.</li>
+      <li><strong>Your email:</strong> only if you sign in with Google or an email code. It is used to sign you in, and is never shown to other players.</li>
+      <li><strong>Your scores:</strong> points from games against the computer, with the game and the date.</li>
+    </ul>
+    <p>Your device also remembers your name, your play streak and your last game, so the home screen can show them. That stays on your phone.</p>
+
+    <h2>Guest players</h2>
+    <p>If you play as a guest (just a name, no sign-in), your name and scores are <strong>deleted automatically after 4 days</strong>. Sign in any time before then to keep them.</p>
+
+    <h2>Saved players</h2>
+    <p>If you sign in, your name and scores are kept so you can play on any device. You can <strong>delete your account at any time</strong>: tap your profile picture on the home screen, then <em>Delete my account</em>. This removes your name, email and all your scores.</p>
+
+    <h2>Who can see what</h2>
+    <p>Other players can see your name and points on the leaderboards. Nobody can see your email.</p>
+
+    <h2>Age</h2>
+    <p>Signing in is for ages 13 and up.</p>
+
+    <h2>Where it is stored</h2>
+    <p>Accounts and scores are stored with Supabase, our database provider. Google sign-in is handled by Google.</p>
+
+    <h2>Contact</h2>
+    <p>Questions, or want something removed? Email <a href="mailto:nepaligamesentertainment@gmail.com">nepaligamesentertainment@gmail.com</a>.</p>
+
+    <p class="muted">Last updated: November 2026</p>
+  </main>
+</body>
+</html>

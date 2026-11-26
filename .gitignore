@@ -1,0 +1,10 @@
+# Never commit secrets: keys, passwords, OAuth client files, env files
+*.txt
+client_secret*.json
+*.env
+.env*
+*service_role*
+*secret*
+
+# Design references (not part of the site)
+mock_up*.png

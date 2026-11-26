@@ -29,7 +29,12 @@ const scoreEls = {
   draw: document.getElementById("score-draw"),
 };
 
-let board, current, gameOver, cpuTimer;
+const overModal = document.getElementById("ttt-over");
+const pointsNote = document.getElementById("ttt-points-note");
+// Points vs the computer (Medium/Hard only): win 10, draw 3
+const TTT_POINTS = { win: 10, draw: 3 };
+
+let board, current, gameOver, cpuTimer, overTimer;
 let starter = "O"; // flipped to X on the first round
 const scores = { X: 0, O: 0, draw: 0 };
 
@@ -73,11 +78,14 @@ function renderScores() {
 
 function newRound() {
   clearTimeout(cpuTimer); // cancel a pending computer move from the old round
+  clearTimeout(overTimer);
+  overModal.hidden = true;
   board = Array(9).fill(null);
   starter = starter === "X" ? "O" : "X"; // alternate who opens
   current = starter;
   gameOver = false;
   gameEl.classList.toggle("cpu-mode", isCpuMode());
+  updatePointsNote();
   cells.forEach((c, i) => {
     c.textContent = "";
     c.className = "cell";
@@ -158,6 +166,35 @@ function endRound({ player, line }) {
     if (isCpuMode()) setStatus(player === CPU ? "Computer wins!" : "You win! 🎉");
     else setStatus(`${player} wins!`);
   }
+  reportRound(player);
+}
+
+function updatePointsNote() {
+  pointsNote.hidden = !(isCpuMode() && difficultyEl.value === "easy");
+}
+
+// Streak for every round; points and the result popup only vs the computer
+function reportRound(player) {
+  if (!isCpuMode()) {
+    window.ngReportResult?.({ game: "tic-tac-toe", mode: "pvp" });
+    return;
+  }
+  const outcome = player === "draw" ? "draw" : player === HUMAN ? "win" : "loss";
+  const easy = difficultyEl.value === "easy";
+  const points = easy ? 0 : TTT_POINTS[outcome] || 0;
+  const icon = { win: "🎉", draw: "🤝", loss: "🤖" }[outcome];
+  const title = { win: "You win!", draw: "It's a draw", loss: "Computer wins" }[outcome];
+  overTimer = setTimeout(() => {
+    document.getElementById("ttt-over-icon").textContent = icon;
+    document.getElementById("ttt-over-title").textContent = title;
+    overModal.hidden = false;
+    document.getElementById("ttt-again").focus();
+    window.ngReportResult?.({
+      game: "tic-tac-toe", mode: "cpu", points,
+      note: easy ? "Play Medium or Hard to earn points" : "",
+      container: document.getElementById("ttt-result"),
+    });
+  }, player === "draw" ? 500 : 900);
 }
 
 // ---------- computer opponent ----------
@@ -225,7 +262,13 @@ modeEl.addEventListener("change", () => {
   starter = "O";
   newRound();
 });
-difficultyEl.addEventListener("change", saveState);
+difficultyEl.addEventListener("change", () => { saveState(); updatePointsNote(); });
+document.getElementById("ttt-again").addEventListener("click", newRound);
+document.getElementById("ttt-home").addEventListener("click", () => {
+  overModal.hidden = true;
+  newRound();
+  document.getElementById("back").click();
+});
 
 loadState();
 renderScores();

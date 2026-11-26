@@ -348,10 +348,35 @@ const BC_STORAGE_KEY = "baghchal-state";
     if (winner === "draw") title = "It's a draw";
     else if (isCpu()) title = winner === (humanSide() === TIGER ? "tiger" : "goat") ? "You win! 🎉" : "Computer wins";
     else title = winner === "tiger" ? "Tigers win!" : "Goats win!";
+    reportGame(winner);
     $("bc-over-icon").textContent = icon;
     $("bc-over-title").textContent = title;
     $("bc-over-reason").textContent = reason;
     setTimeout(() => showModal(overModal, $("bc-again")), winner === "draw" ? 0 : 650);
+  }
+
+  // Points vs the computer: win as Goats 15, as Tigers 10, draw 3 (after 40+ moves)
+  const BC_POINTS = { G: 15, T: 10, draw: 3 };
+  const DRAW_MIN_MOVES = 40;
+
+  function reportGame(winner) {
+    const result = $("bc-result");
+    result.textContent = "";
+    result.hidden = true;
+    if (!isCpu()) {
+      window.ngReportResult?.({ game: "bagh-chal", mode: "pvp" });
+      return;
+    }
+    const side = humanSide();
+    const mine = side === TIGER ? "tiger" : "goat";
+    let points = 0;
+    let note = "";
+    if (winner === mine) points = BC_POINTS[side];
+    else if (winner === "draw") {
+      if (history.length >= DRAW_MIN_MOVES) points = BC_POINTS.draw;
+      else note = `Draws earn points after ${DRAW_MIN_MOVES} moves`;
+    }
+    window.ngReportResult?.({ game: "bagh-chal", mode: "cpu", points, side: mine, note, container: result });
   }
 
   function offerDraw() {

@@ -1,364 +1,466 @@
-/* Home: a living game library. Drifting crimson/blue glows (Nepal flag colors)
-   behind a greeting, quick stats, then a 2-column grid of square game tiles
-   (3 columns on wider screens). The one playable game is the loud tile. */
+/* Home: a dark, card-based game hub (nepaligames.). Header with profile,
+   greeting + streak, this week's champion, continue playing, game cards
+   with live crowns, the weekly leaderboard, then Sports and the footer.
+   Game colors (--bagh-*, --momo-*, ...) are also used by the game screens. */
 :root {
   --crimson: #dc143c;
   --flag-blue: #003893;
-  --glass: rgba(255, 255, 255, 0.72);
-  --glass-line: rgba(31, 36, 48, 0.08);
-  --live-ink: #ffffff;
 
   --bagh-bg: #fff1e0;   --bagh-ink: #c2570c;
   --langur-bg: #f3e8ff; --langur-ink: #7c3aed;
   --kite-bg: #e0f2fe;   --kite-ink: #0369a1;
-  --ludo-bg: #dcfce7;  --ludo-ink: #15803d;
-  --momo-bg: #fee2e2; --momo-ink: #b91c1c;
-  --carrom-bg: #e0e7ff;   --carrom-ink: #4338ca;
-  --blob-a: rgba(220, 20, 60, 0.28);
-  --blob-b: rgba(0, 56, 147, 0.24);
-  --blob-c: rgba(245, 158, 11, 0.22);
+  --ludo-bg: #dcfce7;   --ludo-ink: #15803d;
+  --momo-bg: #fee2e2;   --momo-ink: #b91c1c;
+  --carrom-bg: #e0e7ff; --carrom-ink: #4338ca;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --glass: rgba(27, 30, 38, 0.72);
-    --glass-line: rgba(255, 255, 255, 0.08);
     --bagh-bg: #2a1e10;   --bagh-ink: #fdba74;
     --langur-bg: #251a3a; --langur-ink: #c4b5fd;
     --kite-bg: #0f2536;   --kite-ink: #7dd3fc;
-    --ludo-bg: #10291b;  --ludo-ink: #86efac;
-    --momo-bg: #2e1414; --momo-ink: #fca5a5;
-    --carrom-bg: #1c1f3d;   --carrom-ink: #a5b4fc;
-    --blob-a: rgba(220, 20, 60, 0.30);
-    --blob-b: rgba(37, 99, 235, 0.30);
-    --blob-c: rgba(245, 158, 11, 0.14);
+    --ludo-bg: #10291b;   --ludo-ink: #86efac;
+    --momo-bg: #2e1414;   --momo-ink: #fca5a5;
+    --carrom-bg: #1c1f3d; --carrom-ink: #a5b4fc;
   }
 }
 :root[data-theme="dark"] {
-  --glass: rgba(27, 30, 38, 0.72);
-  --glass-line: rgba(255, 255, 255, 0.08);
   --bagh-bg: #2a1e10;   --bagh-ink: #fdba74;
   --langur-bg: #251a3a; --langur-ink: #c4b5fd;
   --kite-bg: #0f2536;   --kite-ink: #7dd3fc;
-  --ludo-bg: #10291b;  --ludo-ink: #86efac;
-  --momo-bg: #2e1414; --momo-ink: #fca5a5;
-    --carrom-bg: #1c1f3d;   --carrom-ink: #a5b4fc;
-  --blob-a: rgba(220, 20, 60, 0.30);
-  --blob-b: rgba(37, 99, 235, 0.30);
-  --blob-c: rgba(245, 158, 11, 0.14);
+  --ludo-bg: #10291b;   --ludo-ink: #86efac;
+  --momo-bg: #2e1414;   --momo-ink: #fca5a5;
+  --carrom-bg: #1c1f3d; --carrom-ink: #a5b4fc;
 }
+
+/* The home screen and the account popups are always dark */
+.ng-dark {
+  --bg: #0d1017;
+  --card: #171b25;
+  --card-2: #1e2330;
+  --text: #f2f3f7;
+  --muted: #9ba1b0;
+  --line: rgba(255, 255, 255, 0.08);
+  --x: #7aa7ff;
+  --pink: #f2557a;
+  --gold: #fbbf24;
+  --gold-soft: #fde68a;
+  --hero-bg: #241f3a;
+  --hero-ink: #c4b5fd;
+  --warm-bg: #2a2117;
+  --warm-ink: #f5a524;
+  --bagh-bg: #2a1e10;   --bagh-ink: #fdba74;
+  --langur-bg: #251a3a; --langur-ink: #c4b5fd;
+  --ludo-bg: #10291b;   --ludo-ink: #86efac;
+  --momo-bg: #2e1616;   --momo-ink: #fca5a5;
+  --carrom-bg: #1c1f3d; --carrom-ink: #a5b4fc;
+  --ttt-bg: #26182f;    --ttt-ink: #f0abfc;
+  color: var(--text);
+  color-scheme: dark;
+}
+html.on-home, html.on-home body { background: #0d1017; }
 
 .home-view {
-  position: relative;
-  overflow: hidden;
-  padding-block: 16px 24px;
+  background: var(--bg);
+  padding-block: 14px 28px;
 }
-
-/* ---------- drifting background glows ---------- */
-.sky { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
-.blob {
-  position: absolute;
-  width: 70vmax;
-  height: 70vmax;
-  border-radius: 50%;
-  filter: blur(60px);
-  animation: drift 22s ease-in-out infinite alternate;
-}
-.b1 { background: radial-gradient(circle, var(--blob-a), transparent 65%); top: -35vmax; left: -25vmax; }
-.b2 { background: radial-gradient(circle, var(--blob-b), transparent 65%); top: 10vmax; right: -35vmax; animation-duration: 28s; animation-delay: -6s; }
-.b3 { background: radial-gradient(circle, var(--blob-c), transparent 65%); bottom: -40vmax; left: -10vmax; animation-duration: 32s; animation-delay: -12s; }
-@keyframes drift {
-  0%   { transform: translate(0, 0) scale(1); }
-  50%  { transform: translate(8vmax, 6vmax) scale(1.1); }
-  100% { transform: translate(-6vmax, 10vmax) scale(0.95); }
-}
-
 .home {
-  position: relative;
-  z-index: 1;
   width: 100%;
   min-width: 0;
-  max-width: 720px;
+  max-width: 560px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
+.home section { min-width: 0; }
 
-/* ---------- hero ---------- */
-.hero { display: flex; flex-direction: column; gap: 10px; }
-.hero-row { display: flex; justify-content: space-between; align-items: center; }
-.clock {
+/* ---------- loading placeholders ---------- */
+.skel {
+  display: inline-block;
+  width: 7em;
+  max-width: 100%;
+  height: 0.9em;
+  border-radius: 6px;
+  vertical-align: middle;
+  background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.14), rgba(255,255,255,0.06));
+  background-size: 200% 100%;
+  animation: skel 1.2s ease-in-out infinite;
+}
+.skel.wide { width: 10em; height: 1.1em; }
+@keyframes skel { to { background-position: -200% 0; } }
+
+/* ---------- header ---------- */
+.ng-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ng-brand { min-width: 0; }
+.ng-logo {
   margin: 0;
-  font-size: 0.85rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  color: var(--muted);
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.ng-logo span { color: var(--pink); }
+.ng-tag { margin: 2px 0 0; font-size: 0.85rem; color: var(--muted); }
+.ng-avatar {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  min-height: 0;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(196, 181, 253, 0.25);
+  background: linear-gradient(145deg, #3b3358, #2a2440);
+  color: #ede9fe;
+  font-size: 1.15rem;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
+.ng-avatar.big { width: 56px; height: 56px; font-size: 1.4rem; }
+
+/* ---------- guest banner: thin, closable ---------- */
+.ng-banner {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+  padding: 2px 4px 2px 12px;
+  border-radius: 12px;
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.22);
 }
-.clock::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #22c55e;
-  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6);
-  animation: ping 2s ease-out infinite;
-}
-@keyframes ping {
-  0%   { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6); }
-  100% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
-}
-.hero h1 {
-  margin: 0;
-  font-size: clamp(1.7rem, 7vw, 2.4rem);
-  line-height: 1.15;
-  text-wrap: balance;
-}
-.hero h1 .hl {
-  background: linear-gradient(90deg, var(--crimson), var(--x));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.stat {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  background: var(--glass);
-  border: 1px solid var(--glass-line);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  text-align: left;
+.ng-banner-link {
+  flex: 1;
   min-width: 0;
+  min-height: 38px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fcd34d;
+  font-size: 0.84rem;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.stat strong { font-size: 1.3rem; font-variant-numeric: tabular-nums; }
-.stat span { font-size: 0.72rem; color: var(--muted); }
-.stat strong.bump { animation: bump 0.5s ease-out; }
-@keyframes bump { 40% { transform: scale(1.25); } }
+.ng-banner-link b { color: var(--gold-soft); }
+.ng-banner-close {
+  flex: none;
+  width: 34px;
+  min-height: 34px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 1.3rem;
+}
 
-.section-title {
-  margin: 4px 0 0;
-  font-size: 0.8rem;
+/* ---------- greeting + streak ---------- */
+.ng-greet { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+.ng-greet-text { flex: 1 1 13rem; min-width: 0; }
+.ng-hello {
+  margin: 0;
+  display: flex;
+  min-width: 0;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.ng-hello-name { min-width: 2.5em; overflow: hidden; text-overflow: ellipsis; }
+.ng-hello-name:empty { min-width: 0; }
+.ng-hello-pre, .ng-hello-end { flex: none; }
+.ng-greet-sub { margin: 2px 0 0; color: var(--muted); font-size: 0.95rem; }
+.ng-streak {
+  flex: none;
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: var(--warm-bg);
+  color: var(--warm-ink);
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+/* ---------- hero: this week's champion ---------- */
+.ng-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 18px 18px 18px;
+  border-radius: 22px;
+  background:
+    radial-gradient(120% 120% at 100% 0%, rgba(251, 191, 36, 0.18), transparent 50%),
+    var(--hero-bg);
+  border: 1px solid rgba(196, 181, 253, 0.14);
+}
+.ng-hero::after {
+  content: "👑";
+  position: absolute;
+  right: -6px;
+  top: -10px;
+  font-size: 6.5rem;
+  opacity: 0.12;
+  transform: rotate(14deg);
+  pointer-events: none;
+}
+.ng-hero p { margin: 0; }
+.ng-hero-kicker {
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--hero-ink);
+}
+.ng-hero-name {
+  margin-top: 10px !important;
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--gold-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ng-hero-pts { margin-top: 4px !important; font-size: 1rem; color: #e4e0f5; }
+.ng-hero[data-state="empty"] .ng-hero-name,
+.ng-hero[data-state="offline"] .ng-hero-name { color: var(--text); font-size: 1.4rem; }
+.ng-hero[data-state="offline"] .ng-hero-pts { color: var(--muted); }
+.ng-hero-btn {
+  margin-top: 14px;
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  border: 0;
+  background: #fff;
+  color: #1a1530;
+  font-weight: 800;
+}
+.ng-hero[data-state="me"] .ng-hero-btn { background: var(--gold); }
+
+/* ---------- section titles ---------- */
+.ng-h2 {
+  margin: 0 0 10px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.ng-h2 small { font-size: 0.78rem; font-weight: 600; color: var(--muted); }
+
+/* ---------- continue playing ---------- */
+.ng-continue-row {
+  width: 100%;
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--warm-bg);
+  color: var(--text);
   text-align: left;
 }
-
-/* ---------- tiles ---------- */
-.tiles {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-@media (min-width: 600px) {
-  .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
-}
-
-.tile {
-  --tile-bg: var(--card);
-  --tile-ink: var(--text);
-  --tile-ink-contrast: var(--card);
-  position: relative;
-  aspect-ratio: 1;
-  max-width: 100%;
-  min-height: 0;
-  padding: 12px;
-  border-radius: 22px;
-  border: 1px solid var(--glass-line);
-  background: var(--tile-bg);
-  color: var(--tile-ink);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 4px;
-  overflow: hidden;
-  text-align: center;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  animation: tile-in 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2) backwards;
-}
-.tile:nth-child(1) { animation-delay: 0.05s; }
-.tile:nth-child(2) { animation-delay: 0.12s; }
-.tile:nth-child(3) { animation-delay: 0.19s; }
-.tile:nth-child(4) { animation-delay: 0.26s; }
-.tile:nth-child(5) { animation-delay: 0.33s; }
-.tile:nth-child(6) { animation-delay: 0.40s; }
-.tile:nth-child(7) { animation-delay: 0.47s; }
-@keyframes tile-in {
-  from { opacity: 0; transform: translateY(18px) scale(0.94); }
-}
-.tile:active { transform: scale(0.96); }
-@media (hover: hover) {
-  .tile:hover { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12); }
-}
-
-.t-bagh   { --tile-bg: var(--bagh-bg);   --tile-ink: var(--bagh-ink); }
-.t-langur { --tile-bg: var(--langur-bg); --tile-ink: var(--langur-ink); }
-.t-kite   { --tile-bg: var(--kite-bg);   --tile-ink: var(--kite-ink); }
-.t-ludo  { --tile-bg: var(--ludo-bg);  --tile-ink: var(--ludo-ink); }
-.t-momo { --tile-bg: var(--momo-bg); --tile-ink: var(--momo-ink); }
-.t-carrom   { --tile-bg: var(--carrom-bg);   --tile-ink: var(--carrom-ink); }
-
-.tile-name { font-size: 1rem; font-weight: 800; line-height: 1.2; }
-.tile-sub { font-size: 0.75rem; opacity: 0.8; }
-
-.icon {
-  width: 46%;
-  margin-bottom: auto;
-  margin-top: 18%;
-  animation: bob 4s ease-in-out infinite;
-}
-.t-langur .icon { animation-delay: -1s; }
-.t-kite .icon   { animation-delay: -2s; }
-.t-ludo .icon  { animation-delay: -3s; }
-.t-momo .icon { animation-delay: -1.5s; }
-.t-carrom .icon   { animation-delay: -2.5s; }
-@keyframes bob { 50% { transform: translateY(-5px) rotate(-2deg); } }
-
-.steam { animation: steam 2.4s ease-in-out infinite; }
-@keyframes steam { 0%, 100% { opacity: 0.2; transform: translateY(2px); } 50% { opacity: 0.8; transform: translateY(-2px); } }
-.kite-tail { animation: flutter 1.6s ease-in-out infinite alternate; transform-origin: 32px 40px; }
-@keyframes flutter { from { transform: rotate(-6deg); } to { transform: rotate(6deg); } }
-
-.badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  padding: 3px 8px;
-  border-radius: 999px;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  background: color-mix(in srgb, var(--tile-ink) 14%, transparent);
-  color: var(--tile-ink);
-}
-
-.soon .tile-name, .soon .icon { opacity: 0.85; }
-
-/* ---------- other playable tiles (keep their own colors) ---------- */
-.tile.ready {
-  box-shadow: 0 8px 22px color-mix(in srgb, var(--bagh-ink) 25%, transparent);
-  border-color: color-mix(in srgb, var(--bagh-ink) 35%, transparent);
-}
-.ready-badge::before {
-  content: "";
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  margin-right: 5px;
-  border-radius: 50%;
-  background: #22c55e;
-  vertical-align: 1px;
-}
-
-/* ---------- the featured playable tile ---------- */
-.tile.live {
-  grid-column: span 2;
-  aspect-ratio: 2 / 1;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 18px;
-  background: linear-gradient(135deg, var(--crimson), var(--flag-blue));
-  color: var(--live-ink);
-  border: none;
-  box-shadow: 0 12px 30px rgba(220, 20, 60, 0.28);
-}
-/* moving sheen */
-.tile.live::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.28) 50%, transparent 65%);
-  transform: translateX(-100%);
-  animation: sheen 3.5s ease-in-out infinite;
-  pointer-events: none;
-}
-@keyframes sheen { 60%, 100% { transform: translateX(100%); } }
-
-.badge.now { background: rgba(255, 255, 255, 0.22); color: var(--live-ink); }
-.badge.now::before {
-  content: "";
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  margin-right: 5px;
-  border-radius: 50%;
-  background: #4ade80;
-  vertical-align: 1px;
-}
-
-.mini-board {
+.ng-continue-icon {
   flex: none;
-  width: 44%;
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--card-bg, rgba(255,255,255,0.06));
+  color: var(--card-ink, var(--warm-ink));
+  font-size: 1.6rem;
+  overflow: hidden;
+}
+.ng-continue-icon svg { width: 34px; height: 34px; }
+.ng-continue-icon .mini-board { width: 40px; gap: 2px; padding: 2px; }
+.ng-continue-icon .mini-board i { font-size: 0.55rem; border-radius: 3px; }
+.ng-continue-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.ng-continue-text b, .ng-continue-text small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ng-continue-text b { font-size: 1.1rem; }
+.ng-continue-text small { color: var(--muted); font-size: 0.85rem; }
+.ng-continue-play {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--warm-ink);
+  color: #1d1408;
+  font-size: 0.95rem;
+  padding-left: 2px;
+}
+
+/* ---------- popular games: one card per live game ---------- */
+.ng-games { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+.t-ttt  { --card-bg: var(--ttt-bg);  --card-ink: var(--ttt-ink); }
+.t-bagh { --card-bg: var(--bagh-bg); --card-ink: var(--bagh-ink); }
+.t-momo { --card-bg: var(--momo-bg); --card-ink: var(--momo-ink); }
+.t-langur { --card-bg: var(--langur-bg); --card-ink: var(--langur-ink); }
+.t-ludo   { --card-bg: var(--ludo-bg);   --card-ink: var(--ludo-ink); }
+.t-carrom { --card-bg: var(--carrom-bg); --card-ink: var(--carrom-ink); }
+
+.ng-card {
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 20px;
+  border: 1px solid color-mix(in srgb, var(--card-ink) 18%, transparent);
+  background:
+    radial-gradient(140% 120% at 0% 0%, color-mix(in srgb, var(--card-ink) 14%, transparent), transparent 60%),
+    var(--card-bg);
+  color: var(--text);
+  text-align: left;
+  transition: transform 0.15s ease;
+}
+.ng-card:active { transform: scale(0.98); }
+.ng-card-icon {
+  flex: none;
+  width: 68px;
+  height: 68px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--card-ink) 10%, transparent);
+  color: var(--card-ink);
+}
+.ng-card-icon .icon { width: 48px; height: 48px; animation: bob 4s ease-in-out infinite; }
+.ng-card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.ng-card-body > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ng-card-name { font-size: 1.12rem; font-weight: 800; color: var(--text); }
+.ng-card-sub { font-size: 0.78rem; color: var(--card-ink); opacity: 0.85; }
+.ng-card-body > .ng-crown { display: flex; flex-wrap: wrap; min-width: 0; }
+.ng-card-body > .ng-you, .ng-card-body > .ng-nudge, .ng-card-body > .ng-crown.empty { white-space: normal; }
+.ng-crown {
+  margin-top: 4px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--gold);
+  text-shadow: 0 0 18px rgba(251, 191, 36, 0.35);
+}
+.ng-crown-name { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ng-crown-pts { flex: none; }
+.ng-crown-pts { color: var(--gold-soft); font-weight: 700; }
+.ng-crown.empty { font-size: 0.88rem; color: var(--gold-soft); text-shadow: none; }
+.ng-crown.muted { font-size: 0.85rem; font-weight: 600; color: var(--muted); text-shadow: none; }
+.ng-you { font-size: 0.85rem; color: #d7dae3; }
+.ng-nudge { font-size: 0.8rem; font-weight: 700; color: var(--card-ink); }
+.ng-nudge.champ { color: var(--gold); }
+.ng-card-play {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--card-ink);
+  color: #15121c;
+  font-size: 0.9rem;
+  padding-left: 2px;
+}
+
+/* TTT: a little self-playing board as its icon */
+.mini-board {
+  width: 52px;
   aspect-ratio: 1;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
-  padding: 4px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.14);
+  gap: 3px;
+  padding: 3px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ttt-ink) 12%, transparent);
 }
 .mini-board i {
   display: grid;
   place-items: center;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--ttt-ink) 10%, transparent);
+  color: var(--ttt-ink);
   font-style: normal;
   font-weight: 800;
-  font-size: clamp(0.8rem, 4vw, 1.2rem);
+  font-size: 0.72rem;
   line-height: 1;
 }
 .mini-board i.on { animation: pop 0.2s ease-out; }
-.mini-board i.won { background: rgba(255, 255, 255, 0.5); color: var(--flag-blue); }
+.mini-board i.won { background: var(--ttt-ink); color: #26182f; }
 
-.live .tile-name { font-size: 1.35rem; }
-.live-text {
+/* coming soon: smaller, dimmed, after the live games */
+.ng-soon {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.ng-soon-card {
+  min-height: 0;
+  padding: 10px 6px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--card-bg);
+  color: var(--card-ink);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
-  min-width: 0;
-  text-align: left;
-}
-.live .tile-sub { opacity: 0.9; }
-.play-pill {
-  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  min-height: 40px;
-  padding: 0 18px;
-  border-radius: 999px;
-  background: #fff;
-  color: var(--crimson);
-  font-weight: 800;
-  font-size: 0.95rem;
-  animation: pulse 2s ease-in-out infinite;
+  gap: 4px;
+  opacity: 0.55;
 }
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5); }
-  50%      { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
+.ng-soon-card .icon { width: 30px; height: 30px; }
+.ng-soon-name {
+  max-width: 100%;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+.ng-soon-tag { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; opacity: 0.8; }
 
-.footnote { margin: 4px 0 0; font-size: 0.8rem; color: var(--muted); }
+/* ---------- weekly leaderboard ---------- */
+.ng-lb {
+  padding: 16px 14px 10px;
+  border-radius: 20px;
+  background: var(--card);
+  border: 1px solid var(--line);
+}
+.ng-lb .ng-h2 { padding: 0 4px; }
+.ng-lb .ng-h2::after { content: "🏆"; order: -1; display: none; }
+.ng-board { margin: 0; padding: 0; list-style: none; display: grid; gap: 2px; }
+.ng-row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 50px;
+  padding: 6px 8px;
+  border-radius: 12px;
+}
+.ng-row.me {
+  background: rgba(242, 85, 122, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(242, 85, 122, 0.4);
+}
+.ng-row.empty, .ng-row.skel-row { display: block; color: var(--muted); padding: 12px 8px; }
+.ng-rank { text-align: center; font-weight: 800; font-size: 1.05rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ng-rank.medal { font-size: 1.45rem; }
+.ng-who { min-width: 0; display: flex; flex-direction: column; }
+.ng-who b { font-size: 1.02rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ng-who small { font-size: 0.75rem; color: var(--pink); font-weight: 700; }
+.ng-pts { font-weight: 800; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.ng-row-gap { text-align: center; color: var(--muted); line-height: 1; }
 
+/* ---------- footer ---------- */
 .site-footer {
-  margin-top: 8px;
+  margin-top: 4px;
   padding-top: 14px;
-  border-top: 1px solid var(--glass-line);
+  border-top: 1px solid var(--line);
   text-align: center;
+  display: grid;
+  gap: 6px;
 }
 .site-footer p { margin: 0; font-size: 0.78rem; color: var(--muted); }
+.site-footer a { color: var(--text); }
 
 /* ---------- toast ---------- */
 .toast {
@@ -366,22 +468,33 @@
   left: 50%;
   bottom: calc(20px + env(safe-area-inset-bottom, 0px));
   transform: translateX(-50%);
-  z-index: 5;
+  z-index: 40;
+  width: max-content;
   max-width: calc(100% - 32px);
   padding: 12px 18px;
   border-radius: 14px;
-  background: var(--text);
-  color: var(--bg);
+  background: #f2f3f7;
+  color: #12141b;
   font-weight: 600;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   animation: toast-in 0.25s ease-out;
 }
 @keyframes toast-in { from { opacity: 0; transform: translate(-50%, 12px); } }
 
-@media (prefers-reduced-motion: reduce) {
-  .blob, .icon, .kite-tail, .steam, .tile, .tile.live::after, .play-pill, .clock::before,
-  .mini-board i.on, .stat strong.bump, .toast, .view.entering { animation: none; }
+@keyframes bob { 50% { transform: translateY(-3px) rotate(-2deg); } }
+.steam { animation: steam 2.4s ease-in-out infinite; }
+@keyframes steam { 0%, 100% { opacity: 0.2; transform: translateY(2px); } 50% { opacity: 0.8; transform: translateY(-2px); } }
+@keyframes pop { from { transform: scale(0.6); opacity: 0; } }
+
+@media (hover: hover) {
+  .ng-card:hover, .ng-continue-row:hover { filter: brightness(1.08); }
 }
+@media (prefers-reduced-motion: reduce) {
+  .skel, .ng-card-icon .icon, .steam, .mini-board i.on, .toast, .sports-card, .sports-card::after { animation: none; }
+}
+
+@keyframes tile-in { from { opacity: 0; transform: translateY(18px) scale(0.94); } }
+@keyframes sheen { 60%, 100% { transform: translateX(100%); } }
 
 /* ---------- Sports hub card (a link to pagir1.github.io/sports/) ---------- */
 .sports-card {
@@ -389,7 +502,7 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-top: 14px;
+  margin-top: 0;
   padding: 16px 18px;
   border-radius: 22px;
   border: 1px solid rgba(217, 180, 91, 0.45);
