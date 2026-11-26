@@ -28,7 +28,8 @@ The home screen shows a grid of game tiles with a live clock, a Nepali greeting,
 - Fast arcade game: customers queue with momo orders (filling, how many, cooking style, sometimes achar)
 - Tap the filling once per momo, add achar if asked, then tap the cooking style to serve
 - Patience bars, 3 lives, combos up to x5, a new level every 5 orders (bigger orders, less patience)
-- Big full-screen LEVEL announcements (the clock pauses while they show) and a level progress bar (e.g. 3/5 orders to the next level)
+- Levels 1–2: big full-screen LEVEL announcement (the clock pauses briefly). Level 3 and up: the level number shows in the background behind the steamer and the top-bar Level box pops; the game never pauses
+- Level progress bar (e.g. 3/5 orders to the next level)
 - Best score, games played and momos served saved in the browser and shown on the home screen
 - Pause, keyboard shortcuts on computers (1/2/3 fillings, A achar, Q/W/E cooking)
 - Buttons sit right under the customer orders; a steps strip (① filling → ② cook) shows what to do next, and the button to tap is lit up with a taps-left badge (plus a 👇 TAP tag on levels 1–2)

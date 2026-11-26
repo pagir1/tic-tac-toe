@@ -242,33 +242,49 @@ const MR_STORAGE_KEY = "momorush-state";
 
   // "LEVEL N" announcement.
   // Levels 1-2: big, full-screen, and the clock is held while it shows.
-  // Level 3+: a quick flash of the number over the game; the clock keeps running.
+  // Level 3+: shown BEHIND the steamer in the background plus a pop on the HUD level box.
+  //           Nothing covers the orders or buttons and the game never pauses.
   const LEVEL_SHOW_MS = 1700;
-  const LEVEL_QUICK_MS = 900;
+  const LEVEL_BG_MS = 1400;
   let holdUntil = 0;
   let levelToken = 0;
   function showLevel(level, then) {
     const el = $("mr-levelup");
     const token = ++levelToken;
-    const quick = level >= 3;
+    if (level >= 3) { showLevelInBackground(level); if (then) then(); return; }
     $("mr-lv-kicker").textContent = level === 1 ? "Get ready" : "Level up!";
     $("mr-lv-title").innerHTML = `<small class="lv-word">Level</small> <b class="lv-num">${level}</b>`;
     $("mr-lv-sub").textContent = levelMessage(level);
-    el.classList.toggle("quick", quick);
     el.hidden = false;
     restartAnim(el, "show");
-    const ms = quick ? LEVEL_QUICK_MS : reduceMotion ? 1200 : LEVEL_SHOW_MS;
-    holdUntil = quick ? 0 : performance.now() + ms;
+    const ms = reduceMotion ? 1200 : LEVEL_SHOW_MS;
+    holdUntil = performance.now() + ms;
     setTimeout(() => {
       if (token !== levelToken) return;
       el.hidden = true;
       if (then) then();
     }, ms);
   }
+  let bgTimer;
+  function showLevelInBackground(level) {
+    const bg = $("mr-lv-bg");
+    $("mr-lv-bg-num").textContent = level;
+    $("mr-lv-bg-sub").textContent = levelMessage(level);
+    bg.hidden = false;
+    restartAnim(bg, "show");
+    restartAnim($("mr-level").parentElement, "lv-pop");
+    const kitchen = view.querySelector(".mr-kitchen");
+    kitchen.classList.add("lv-flash"); // steamer steps back so the number reads clearly
+    clearTimeout(bgTimer);
+    bgTimer = setTimeout(() => { bg.hidden = true; kitchen.classList.remove("lv-flash"); }, LEVEL_BG_MS);
+  }
+
   function cancelLevel() {
     levelToken++;
     holdUntil = 0;
     $("mr-levelup").hidden = true;
+    $("mr-lv-bg").hidden = true;
+    view.querySelector(".mr-kitchen").classList.remove("lv-flash");
   }
 
   // ---------- rendering ----------

@@ -672,26 +672,63 @@
 .lv-sub { max-width: 90%; font-size: 1.15rem; font-weight: 800; color: var(--text); }
 .lv-word, .lv-num { font: inherit; }
 
-/* level 3+: quick flash over the game, no backdrop; "Level" faded, the number clear */
-.mr-levelup.quick {
-  background: none;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
+/* level 3+: the level shows BEHIND the steamer (background of the bottom area) */
+.mr-kitchen > .mr-progress, .mr-kitchen > .mr-plate { position: relative; z-index: 1; transition: opacity 0.25s ease; }
+.mr-kitchen.lv-flash > .mr-progress, .mr-kitchen.lv-flash > .mr-plate { opacity: 0.22; }
+.mr-lv-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  text-align: center;
+  line-height: 1;
 }
-.mr-levelup.quick.show { animation: lv-quick 0.9s ease-out forwards; }
-.mr-levelup.quick.show .lv-title { animation: lv-pop-quick 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.4); }
-@keyframes lv-quick { 0% { opacity: 0; } 12%, 62% { opacity: 1; } 100% { opacity: 0; transform: translateY(-24px); } }
-@keyframes lv-pop-quick { from { transform: scale(1.8); } }
-.mr-levelup.quick .lv-kicker { display: none; }
-.mr-levelup.quick .lv-title { filter: drop-shadow(0 0 8px var(--bg)) drop-shadow(0 0 2px var(--bg)); }
-.mr-levelup.quick .lv-word { font-size: 0.42em; opacity: 0.45; vertical-align: middle; }
-.mr-levelup.quick .lv-sub {
-  padding: 3px 12px;
+.mr-lv-bg small {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--momo-strong);
+  opacity: 0.6;
+}
+.mr-lv-bg b {
+  font-size: clamp(9rem, 55vw, 14rem);
+  font-weight: 900;
+  background: linear-gradient(180deg, #f59e0b, var(--momo-strong));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 6px 0 color-mix(in srgb, var(--momo-strong) 20%, transparent));
+}
+.mr-lv-bg span {
+  margin-top: 6px;
+  padding: 2px 10px;
   border-radius: 999px;
-  background: var(--card);
-  font-size: 0.95rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  background: color-mix(in srgb, var(--card) 85%, transparent);
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text);
 }
+.mr-lv-bg.show { animation: lv-bg 1.4s ease-out forwards; }
+@keyframes lv-bg {
+  0%   { opacity: 0; transform: scale(0.7); }
+  15%  { opacity: 1; transform: scale(1.05); }
+  70%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.1); }
+}
+/* the Level box in the top bar pops at the same time */
+.hud.lv-pop { animation: hud-pop 0.9s ease-out; border-color: var(--momo-strong); }
+.hud.lv-pop strong { color: var(--momo-strong); }
+@keyframes hud-pop {
+  0%   { transform: scale(1); box-shadow: 0 0 0 0 color-mix(in srgb, var(--momo-strong) 60%, transparent); }
+  25%  { transform: scale(1.18); }
+  100% { transform: scale(1); box-shadow: 0 0 0 12px color-mix(in srgb, var(--momo-strong) 0%, transparent); }
+}
+
 
 /* bottom area: level progress above a smaller steamer */
 .mr-kitchen { justify-content: center; gap: 14px; }
@@ -759,7 +796,8 @@
   .mr-achar-dish, .wisp, .mr-btn.next, .mr-countdown.pop, .mr-kitchen.flash::after,
   .mr-confetti i, .mr-go, .mr-hero-momo, .mr-ticket[data-mood="angry"]::after, .mr-btn.coach::before { animation: none; }
   .mr-step { transition: none; }
-  .mr-levelup.show .lv-title, .mr-oops.in, .mr-recipe.bad { animation: none; }
+  .mr-levelup.show .lv-title, .mr-oops.in, .mr-recipe.bad, .hud.lv-pop { animation: none; }
+  .mr-lv-bg.show { animation: none; }
   .mr-progress-bar i { transition: none; }
   .mr-coach-bubble, .momo.tutorial .mr-recipe { animation: none; }
   .wisp { opacity: 0; }
