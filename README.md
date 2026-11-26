@@ -4,7 +4,7 @@ A mobile-first browser game hub built with plain HTML, CSS and JavaScript. No bu
 
 **Play it:** https://pagir1.github.io/tic-tac-toe/
 
-The home screen shows a grid of game tiles with a live clock, a Nepali greeting, your saved stats and a self-playing demo board. **Tic Tac Toe** and **Bagh Chal** are playable now; Memory Match, Four in a Row, Snake, Sudoku and Dots & Boxes are marked *coming soon*.
+The home screen shows a grid of game tiles with a live clock, a Nepali greeting, your saved stats and a self-playing demo board. **Tic Tac Toe**, **Bagh Chal** and **Momo Rush** are playable now; Langur Burja, Kite Fight, Ludo and Carrom are marked *coming soon*.
 
 ## Tic Tac Toe features
 
@@ -22,6 +22,16 @@ The home screen shows a grid of game tiles with a live clock, a Nepali greeting,
 - **2 Players**, or **vs Computer** playing either side
 - Move hints (red rings show captures), animated moves, undo, draw, restart, how-to-play guide
 - Tiger / Goat / Draw scores saved in the browser and shown on the home screen
+
+## Momo Rush features
+
+- Fast arcade game: customers queue with momo orders (filling, how many, cooking style, sometimes achar)
+- Tap the filling once per momo, add achar if asked, then tap the cooking style to serve
+- Patience bars, 3 lives, combos up to x5, a new level every 5 orders (bigger orders, less patience)
+- Best score, games played and momos served saved in the browser and shown on the home screen
+- Pause, keyboard shortcuts on computers (1/2/3 fillings, A achar, Q/W/E cooking)
+- Bamboo steamer with rising steam, customer moods, glowing next-button hints on levels 1–2, 3-2-1 countdown, level-up flash, confetti for a new best
+- Sound effects made in the browser (no audio files) with a mute button
 
 ## How to play
 
@@ -43,6 +53,9 @@ The home screen shows a grid of game tiles with a live clock, a Nepali greeting,
 | `baghchal-logic.js` | Bagh Chal rules only (board, moves, wins, computer player); no page code |
 | `baghchal.js` | Bagh Chal screen: SVG board, taps, animation, undo, saved scores |
 | `baghchal.css` | Bagh Chal board, pieces and pop-up styles |
+| `momo-logic.js` | Momo Rush rules only (orders, scoring, levels, lives); no page code |
+| `momo.js` | Momo Rush screen: game loop, customers, plate, effects, saved best score |
+| `momo.css` | Momo Rush kitchen, buttons and animation styles |
 
 ## Hosting
 

@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="baghchal.css">
+  <link rel="stylesheet" href="momo.css">
 </head>
 <body>
   <!-- ================= HOME ================= -->
@@ -30,10 +31,10 @@
         <div class="stats">
           <div class="stat"><strong id="stat-rounds">0</strong><span>Rounds played</span></div>
           <div class="stat"><strong id="stat-live">0/7</strong><span>Games live</span></div>
-          <div class="stat"><strong id="stat-x">0</strong><span>X wins</span></div>
-          <div class="stat"><strong id="stat-o">0</strong><span>O wins</span></div>
-          <div class="stat"><strong id="stat-tiger">0</strong><span>🐅 Tiger wins</span></div>
-          <div class="stat"><strong id="stat-goat">0</strong><span>🐐 Goat wins</span></div>
+          <div class="stat"><strong id="stat-momobest">0</strong><span>🥟 Momo best</span></div>
+          <div class="stat"><strong id="stat-xo">0–0</strong><span>X–O wins</span></div>
+          <div class="stat"><strong id="stat-tg">0–0</strong><span>🐅–🐐 wins</span></div>
+          <div class="stat"><strong id="stat-served">0</strong><span>Momos served</span></div>
         </div>
       </header>
 
@@ -64,69 +65,70 @@
           <span class="tile-sub">Tigers vs goats</span>
         </button>
 
-        <button class="tile soon t-memory" data-name="Memory Match">
-          <span class="badge">Coming soon</span>
+        <button class="tile ready t-momo" data-game="momo-rush" aria-label="Play Momo Rush">
+          <span class="badge ready-badge">Play now</span>
           <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
-            <rect x="6" y="14" width="28" height="38" rx="5" fill="none" stroke="currentColor" stroke-width="2.5" transform="rotate(-10 20 33)"/>
-            <rect x="28" y="10" width="28" height="38" rx="5" fill="currentColor" opacity=".9" transform="rotate(8 42 29)"/>
-            <path d="M42 22l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6-4.5-4 6-1z" fill="var(--tile-ink-contrast)"/>
+            <path class="steam" d="M24 15c-3-3 3-5 0-9M32 13c-3-3 3-5 0-9M40 15c-3-3 3-5 0-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".6"/>
+            <path d="M8 44c0-13 11-24 24-24s24 11 24 24c0 4-4 7-8 7H16c-4 0-8-3-8-7z" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="2.5"/>
+            <path d="M32 21v9M24 23l3 8M40 23l-3 8M17 29l6 5M47 29l-6 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
           </svg>
-          <span class="tile-name">Memory Match</span>
-          <span class="tile-sub">Flip &amp; find pairs</span>
+          <span class="tile-name">Momo Rush</span>
+          <span class="tile-sub">Fold fast, serve hot</span>
         </button>
 
-        <button class="tile soon t-four" data-name="Four in a Row">
+        <button class="tile soon t-langur" data-name="Langur Burja">
           <span class="badge">Coming soon</span>
           <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
-            <rect x="4" y="8" width="56" height="48" rx="8" fill="none" stroke="currentColor" stroke-width="2.5"/>
-            <g fill="currentColor">
-              <circle cx="16" cy="44" r="6"/><circle cx="28" cy="44" r="6" opacity=".35"/><circle cx="40" cy="44" r="6"/>
-              <circle cx="28" cy="32" r="6"/><circle cx="40" cy="32" r="6" opacity=".35"/><circle cx="40" cy="20" r="6"/>
-              <circle cx="52" cy="44" r="6" opacity=".35"/>
+            <rect x="6" y="18" width="28" height="28" rx="6" fill="none" stroke="currentColor" stroke-width="2.5" transform="rotate(-12 20 32)"/>
+            <text x="20" y="38" text-anchor="middle" font-size="16" fill="currentColor" transform="rotate(-12 20 32)">♥</text>
+            <rect x="30" y="14" width="28" height="28" rx="6" fill="currentColor" opacity=".9" transform="rotate(10 44 28)"/>
+            <text x="44" y="34" text-anchor="middle" font-size="16" fill="var(--tile-bg)" transform="rotate(10 44 28)">♠</text>
+          </svg>
+          <span class="tile-name">Langur Burja</span>
+          <span class="tile-sub">Nepali dice luck</span>
+        </button>
+
+        <button class="tile soon t-kite" data-name="Kite Fight">
+          <span class="badge">Coming soon</span>
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <path d="M32 4 50 24 32 42 14 24z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M32 4v38M14 24h36" stroke="currentColor" stroke-width="1.5" opacity=".7"/>
+            <g class="kite-tail" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M32 42c-4 5 4 8 0 13s4 6 2 8"/>
+              <path d="M28 50l4 1 4-1M29 58l4 1 4-1"/>
             </g>
           </svg>
-          <span class="tile-name">Four in a Row</span>
-          <span class="tile-sub">Drop &amp; connect</span>
+          <span class="tile-name">Kite Fight</span>
+          <span class="tile-sub">Dashain changa chet</span>
         </button>
 
-        <button class="tile soon t-snake" data-name="Snake">
-          <span class="badge">Coming soon</span>
-          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
-            <path class="snake-path" d="M10 50h16V34h20V18h-14" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="30" cy="18" r="5" fill="currentColor"/>
-            <circle cx="52" cy="48" r="4" fill="currentColor" opacity=".6"/>
-          </svg>
-          <span class="tile-name">Snake</span>
-          <span class="tile-sub">Eat, grow, survive</span>
-        </button>
-
-        <button class="tile soon t-sudoku" data-name="Sudoku">
+        <button class="tile soon t-ludo" data-name="Ludo">
           <span class="badge">Coming soon</span>
           <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
             <rect x="6" y="6" width="52" height="52" rx="6" fill="none" stroke="currentColor" stroke-width="2.5"/>
-            <path d="M23.3 6v52M40.7 6v52M6 23.3h52M6 40.7h52" stroke="currentColor" stroke-width="1.5" opacity=".6"/>
-            <g fill="currentColor" font-size="11" font-weight="700" font-family="system-ui, sans-serif" text-anchor="middle">
-              <text x="14.7" y="19">5</text><text x="49.3" y="19">3</text><text x="32" y="36">7</text>
-              <text x="14.7" y="54">9</text><text x="49.3" y="54">1</text>
-            </g>
+            <rect x="10" y="10" width="18" height="18" rx="3" fill="currentColor"/>
+            <rect x="36" y="36" width="18" height="18" rx="3" fill="currentColor"/>
+            <rect x="36" y="10" width="18" height="18" rx="3" fill="currentColor" opacity=".35"/>
+            <rect x="10" y="36" width="18" height="18" rx="3" fill="currentColor" opacity=".35"/>
+            <path d="M32 26l6 6-6 6-6-6z" fill="currentColor"/>
           </svg>
-          <span class="tile-name">Sudoku</span>
-          <span class="tile-sub">Number logic</span>
+          <span class="tile-name">Ludo</span>
+          <span class="tile-sub">Race your 4 tokens</span>
         </button>
 
-        <button class="tile soon t-dots" data-name="Dots &amp; Boxes">
+        <button class="tile soon t-carrom" data-name="Carrom">
           <span class="badge">Coming soon</span>
           <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
-            <rect x="12" y="12" width="20" height="20" fill="currentColor" opacity=".3"/>
-            <path d="M12 12h20v20H12zM32 12h20M32 32v20M12 52h20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <rect x="6" y="6" width="52" height="52" rx="5" fill="none" stroke="currentColor" stroke-width="3"/>
             <g fill="currentColor">
-              <circle cx="12" cy="12" r="4"/><circle cx="32" cy="12" r="4"/><circle cx="52" cy="12" r="4"/>
-              <circle cx="12" cy="32" r="4"/><circle cx="32" cy="32" r="4"/><circle cx="52" cy="32" r="4"/>
-              <circle cx="12" cy="52" r="4"/><circle cx="32" cy="52" r="4"/><circle cx="52" cy="52" r="4"/>
+              <circle cx="12" cy="12" r="4"/><circle cx="52" cy="12" r="4"/><circle cx="12" cy="52" r="4"/><circle cx="52" cy="52" r="4"/>
+              <circle cx="32" cy="32" r="4"/><circle cx="26" cy="27" r="3.5" opacity=".5"/><circle cx="38" cy="27" r="3.5"/>
+              <circle cx="26" cy="37" r="3.5"/><circle cx="38" cy="37" r="3.5" opacity=".5"/>
             </g>
+            <circle cx="32" cy="32" r="12" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".6"/>
           </svg>
-          <span class="tile-name">Dots &amp; Boxes</span>
-          <span class="tile-sub">Close the squares</span>
+          <span class="tile-name">Carrom</span>
+          <span class="tile-sub">Flick &amp; pocket</span>
         </button>
       </div>
 
@@ -270,9 +272,131 @@
     </div>
   </section>
 
+  <!-- ================= MOMO RUSH ================= -->
+  <section id="momo-rush" class="view game-view" aria-label="Momo Rush" hidden>
+    <main class="game momo">
+      <header class="top">
+        <button class="back" aria-label="Back to all games">‹ Games</button>
+        <div class="top-title">
+          <p class="brand">Nepaligamesus</p>
+          <h1>Momo Rush</h1>
+        </div>
+        <div class="top-btns">
+          <button class="round-btn" id="mr-sound" aria-label="Sound on" aria-pressed="true">🔊</button>
+          <button class="round-btn" id="mr-pause" aria-label="Pause">⏸</button>
+        </div>
+      </header>
+
+      <div class="mr-hud">
+        <div class="hud"><span>Score</span><strong id="mr-score">0</strong></div>
+        <div class="hud"><span>Level</span><strong id="mr-level">1</strong></div>
+        <div class="hud"><span>Combo</span><strong id="mr-combo">×1</strong></div>
+        <div class="hud"><span>Lives</span><strong id="mr-lives" aria-label="3 lives">❤️❤️❤️</strong></div>
+      </div>
+
+      <div class="mr-queue" id="mr-queue" aria-label="Customers waiting"></div>
+
+      <div class="mr-kitchen">
+        <div class="mr-plate" id="mr-plate">
+          <span class="wisp w1" aria-hidden="true"></span><span class="wisp w2" aria-hidden="true"></span><span class="wisp w3" aria-hidden="true"></span>
+          <div class="mr-slots" id="mr-slots"></div>
+          <span class="mr-achar-dish" id="mr-achar-dish" hidden>🌶️</span>
+        </div>
+        <p class="mr-hint" id="mr-hint" aria-live="polite">Tap the filling the customer wants</p>
+        <div class="mr-fx" id="mr-fx" aria-hidden="true"></div>
+        <div class="mr-countdown" id="mr-countdown" aria-live="assertive" hidden></div>
+      </div>
+
+      <div class="mr-controls">
+        <p class="mr-row-label">Filling</p>
+        <div class="mr-row" id="mr-fillings">
+          <button class="mr-btn" data-kind="filling" data-value="veg"><b>🥬</b>Veg</button>
+          <button class="mr-btn" data-kind="filling" data-value="chicken"><b>🍗</b>Chicken</button>
+          <button class="mr-btn" data-kind="filling" data-value="buff"><b>🐃</b>Buff</button>
+          <button class="mr-btn achar" data-kind="achar" id="mr-achar-btn" hidden><b>🌶️</b>Achar</button>
+        </div>
+        <p class="mr-row-label">Cook &amp; serve</p>
+        <div class="mr-row" id="mr-styles">
+          <button class="mr-btn cook" data-kind="style" data-value="steam"><b>♨️</b>Steam</button>
+          <button class="mr-btn cook" data-kind="style" data-value="fry"><b>🔥</b>Fry</button>
+          <button class="mr-btn cook" data-kind="style" data-value="jhol"><b>🍲</b>Jhol</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Start -->
+    <div class="modal" id="mr-start" role="dialog" aria-modal="true" aria-labelledby="mr-start-title">
+      <div class="modal-card mr-start-card">
+        <div class="mr-hero" aria-hidden="true">
+          <span class="mr-hero-momo">🥟</span>
+        </div>
+        <h2 id="mr-start-title" class="mr-title">Momo Rush</h2>
+        <p class="modal-sub">Customers are lining up. Serve them before they lose patience!</p>
+        <ol class="mr-steps">
+          <li><b>🥬</b><span>Tap the <strong>filling</strong>, once per momo</span></li>
+          <li><b>🔥</b><span>Tap how to <strong>cook</strong> it</span></li>
+          <li><b>😋</b><span>Served! Be quick for <strong>bonus points</strong></span></li>
+        </ol>
+        <details class="mr-more">
+          <summary>More rules</summary>
+          <ul>
+            <li>Always serve the customer marked <strong>Now serving</strong>.</li>
+            <li>From level 3 some orders want <strong>🌶️ achar</strong>. Add it before cooking.</li>
+            <li>Wrong taps make customers wait longer. Perfect orders in a row build a <strong>combo</strong> (up to ×5 points).</li>
+            <li>If a customer's bar runs out they leave and you lose a ❤️. Lose all 3 and the shop closes.</li>
+            <li>On levels 1–2 the next button to tap glows to help you learn.</li>
+          </ul>
+        </details>
+        <p class="mr-best-line">🏆 Best score: <strong id="mr-best-start">0</strong></p>
+        <div class="modal-actions">
+          <button id="mr-go" class="primary mr-go">Open the shop</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paused -->
+    <div class="modal" id="mr-paused" role="dialog" aria-modal="true" aria-labelledby="mr-paused-title" hidden>
+      <div class="modal-card">
+        <p class="modal-icon">⏸</p>
+        <h2 id="mr-paused-title">Paused</h2>
+        <p class="modal-sub">Your customers will wait.</p>
+        <div class="modal-actions">
+          <button id="mr-resume" class="primary">Resume</button>
+          <button id="mr-restart" class="secondary">Restart</button>
+          <button id="mr-quit" class="secondary">Back to games</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game over -->
+    <div class="modal" id="mr-over" role="dialog" aria-modal="true" aria-labelledby="mr-over-title" hidden>
+      <div class="modal-card">
+        <div class="mr-confetti" id="mr-confetti" aria-hidden="true"></div>
+        <p class="modal-icon">🥟</p>
+        <h2 id="mr-over-title">Shop closed!</h2>
+        <p class="mr-final"><strong id="mr-final-score">0</strong> points</p>
+        <p class="mr-newbest" id="mr-newbest" hidden>🏆 New best score!</p>
+        <div class="mr-summary">
+          <div><strong id="mr-final-momos">0</strong><span>Momos served</span></div>
+          <div><strong id="mr-final-level">1</strong><span>Level reached</span></div>
+          <div><strong id="mr-final-combo">0</strong><span>Best combo</span></div>
+        </div>
+        <p class="modal-sub">Best score: <strong id="mr-best-over">0</strong></p>
+        <div class="modal-actions">
+          <button id="mr-again" class="primary">Play again</button>
+          <button id="mr-home" class="secondary">Back to games</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mr-banner" id="mr-banner" role="status" hidden></div>
+  </section>
+
   <script src="script.js"></script>
   <script src="baghchal-logic.js"></script>
   <script src="baghchal.js"></script>
+  <script src="momo-logic.js"></script>
+  <script src="momo.js"></script>
   <script src="home.js"></script>
 </body>
 </html>

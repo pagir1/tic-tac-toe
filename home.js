@@ -1,6 +1,7 @@
 // Home screen: screen switching, live clock + greeting, saved stats,
 // a self-playing mini board on the Tic Tac Toe tile, and "coming soon" toasts.
-// Relies on WIN_LINES and STORAGE_KEY from script.js, BC_STORAGE_KEY from baghchal.js.
+// Relies on WIN_LINES and STORAGE_KEY from script.js, BC_STORAGE_KEY from baghchal.js,
+// MR_STORAGE_KEY from momo.js.
 
 const views = [...document.querySelectorAll(".view")];
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -99,12 +100,15 @@ function refreshStats() {
   const t = readScores(STORAGE_KEY, { X: 0, O: 0, draw: 0 });
   const b = readScores(BC_STORAGE_KEY, { tiger: 0, goat: 0, draw: 0 });
 
+  let m = { best: 0, played: 0, served: 0 };
+  try { m = { ...m, ...JSON.parse(localStorage.getItem(MR_STORAGE_KEY)) }; } catch { /* n/a */ }
+
   const stats = {
-    rounds: t.X + t.O + t.draw + b.tiger + b.goat + b.draw,
-    x: t.X,
-    o: t.O,
-    tiger: b.tiger,
-    goat: b.goat,
+    rounds: t.X + t.O + t.draw + b.tiger + b.goat + b.draw + m.played,
+    momobest: m.best,
+    xo: `${t.X}–${t.O}`,
+    tg: `${b.tiger}–${b.goat}`,
+    served: m.served,
   };
   for (const [key, value] of Object.entries(stats)) {
     const el = document.getElementById(`stat-${key}`);

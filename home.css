@@ -9,11 +9,11 @@
   --live-ink: #ffffff;
 
   --bagh-bg: #fff1e0;   --bagh-ink: #c2570c;
-  --memory-bg: #f3e8ff; --memory-ink: #7c3aed;
-  --four-bg: #e0f2fe;   --four-ink: #0369a1;
-  --snake-bg: #dcfce7;  --snake-ink: #15803d;
-  --sudoku-bg: #fee2e2; --sudoku-ink: #b91c1c;
-  --dots-bg: #e0e7ff;   --dots-ink: #4338ca;
+  --langur-bg: #f3e8ff; --langur-ink: #7c3aed;
+  --kite-bg: #e0f2fe;   --kite-ink: #0369a1;
+  --ludo-bg: #dcfce7;  --ludo-ink: #15803d;
+  --momo-bg: #fee2e2; --momo-ink: #b91c1c;
+  --carrom-bg: #e0e7ff;   --carrom-ink: #4338ca;
   --blob-a: rgba(220, 20, 60, 0.28);
   --blob-b: rgba(0, 56, 147, 0.24);
   --blob-c: rgba(245, 158, 11, 0.22);
@@ -23,11 +23,11 @@
     --glass: rgba(27, 30, 38, 0.72);
     --glass-line: rgba(255, 255, 255, 0.08);
     --bagh-bg: #2a1e10;   --bagh-ink: #fdba74;
-    --memory-bg: #251a3a; --memory-ink: #c4b5fd;
-    --four-bg: #0f2536;   --four-ink: #7dd3fc;
-    --snake-bg: #10291b;  --snake-ink: #86efac;
-    --sudoku-bg: #2e1414; --sudoku-ink: #fca5a5;
-    --dots-bg: #1c1f3d;   --dots-ink: #a5b4fc;
+    --langur-bg: #251a3a; --langur-ink: #c4b5fd;
+    --kite-bg: #0f2536;   --kite-ink: #7dd3fc;
+    --ludo-bg: #10291b;  --ludo-ink: #86efac;
+    --momo-bg: #2e1414; --momo-ink: #fca5a5;
+    --carrom-bg: #1c1f3d;   --carrom-ink: #a5b4fc;
     --blob-a: rgba(220, 20, 60, 0.30);
     --blob-b: rgba(37, 99, 235, 0.30);
     --blob-c: rgba(245, 158, 11, 0.14);
@@ -37,11 +37,11 @@
   --glass: rgba(27, 30, 38, 0.72);
   --glass-line: rgba(255, 255, 255, 0.08);
   --bagh-bg: #2a1e10;   --bagh-ink: #fdba74;
-  --memory-bg: #251a3a; --memory-ink: #c4b5fd;
-  --four-bg: #0f2536;   --four-ink: #7dd3fc;
-  --snake-bg: #10291b;  --snake-ink: #86efac;
-  --sudoku-bg: #2e1414; --sudoku-ink: #fca5a5;
-    --dots-bg: #1c1f3d;   --dots-ink: #a5b4fc;
+  --langur-bg: #251a3a; --langur-ink: #c4b5fd;
+  --kite-bg: #0f2536;   --kite-ink: #7dd3fc;
+  --ludo-bg: #10291b;  --ludo-ink: #86efac;
+  --momo-bg: #2e1414; --momo-ink: #fca5a5;
+    --carrom-bg: #1c1f3d;   --carrom-ink: #a5b4fc;
   --blob-a: rgba(220, 20, 60, 0.30);
   --blob-b: rgba(37, 99, 235, 0.30);
   --blob-c: rgba(245, 158, 11, 0.14);
@@ -201,12 +201,11 @@
 }
 
 .t-bagh   { --tile-bg: var(--bagh-bg);   --tile-ink: var(--bagh-ink); }
-.t-memory { --tile-bg: var(--memory-bg); --tile-ink: var(--memory-ink); }
-.t-four   { --tile-bg: var(--four-bg);   --tile-ink: var(--four-ink); }
-.t-snake  { --tile-bg: var(--snake-bg);  --tile-ink: var(--snake-ink); }
-.t-sudoku { --tile-bg: var(--sudoku-bg); --tile-ink: var(--sudoku-ink); }
-.t-dots   { --tile-bg: var(--dots-bg);   --tile-ink: var(--dots-ink); }
-.t-memory { --tile-ink-contrast: var(--memory-bg); }
+.t-langur { --tile-bg: var(--langur-bg); --tile-ink: var(--langur-ink); }
+.t-kite   { --tile-bg: var(--kite-bg);   --tile-ink: var(--kite-ink); }
+.t-ludo  { --tile-bg: var(--ludo-bg);  --tile-ink: var(--ludo-ink); }
+.t-momo { --tile-bg: var(--momo-bg); --tile-ink: var(--momo-ink); }
+.t-carrom   { --tile-bg: var(--carrom-bg);   --tile-ink: var(--carrom-ink); }
 
 .tile-name { font-size: 1rem; font-weight: 800; line-height: 1.2; }
 .tile-sub { font-size: 0.75rem; opacity: 0.8; }
@@ -217,15 +216,17 @@
   margin-top: 18%;
   animation: bob 4s ease-in-out infinite;
 }
-.t-memory .icon { animation-delay: -1s; }
-.t-four .icon   { animation-delay: -2s; }
-.t-snake .icon  { animation-delay: -3s; }
-.t-sudoku .icon { animation-delay: -1.5s; }
-.t-dots .icon   { animation-delay: -2.5s; }
+.t-langur .icon { animation-delay: -1s; }
+.t-kite .icon   { animation-delay: -2s; }
+.t-ludo .icon  { animation-delay: -3s; }
+.t-momo .icon { animation-delay: -1.5s; }
+.t-carrom .icon   { animation-delay: -2.5s; }
 @keyframes bob { 50% { transform: translateY(-5px) rotate(-2deg); } }
 
-.snake-path { stroke-dasharray: 90; animation: slither 3s ease-in-out infinite alternate; }
-@keyframes slither { from { stroke-dashoffset: 30; } to { stroke-dashoffset: 0; } }
+.steam { animation: steam 2.4s ease-in-out infinite; }
+@keyframes steam { 0%, 100% { opacity: 0.2; transform: translateY(2px); } 50% { opacity: 0.8; transform: translateY(-2px); } }
+.kite-tail { animation: flutter 1.6s ease-in-out infinite alternate; transform-origin: 32px 40px; }
+@keyframes flutter { from { transform: rotate(-6deg); } to { transform: rotate(6deg); } }
 
 .badge {
   position: absolute;
@@ -243,7 +244,23 @@
 
 .soon .tile-name, .soon .icon { opacity: 0.85; }
 
-/* ---------- the playable tile ---------- */
+/* ---------- other playable tiles (keep their own colors) ---------- */
+.tile.ready {
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--bagh-ink) 25%, transparent);
+  border-color: color-mix(in srgb, var(--bagh-ink) 35%, transparent);
+}
+.ready-badge::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: #22c55e;
+  vertical-align: 1px;
+}
+
+/* ---------- the featured playable tile ---------- */
 .tile.live {
   grid-column: span 2;
   aspect-ratio: 2 / 1;
@@ -362,6 +379,6 @@
 @keyframes toast-in { from { opacity: 0; transform: translate(-50%, 12px); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .blob, .icon, .snake-path, .tile, .tile.live::after, .play-pill, .clock::before,
+  .blob, .icon, .kite-tail, .steam, .tile, .tile.live::after, .play-pill, .clock::before,
   .mini-board i.on, .stat strong.bump, .toast, .view.entering { animation: none; }
 }
