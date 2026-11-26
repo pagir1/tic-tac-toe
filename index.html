@@ -299,6 +299,7 @@
       <div class="mr-recipe-wrap">
         <div class="mr-recipe" id="mr-recipe" aria-label="Order steps"></div>
         <span class="mr-coach-steps" id="mr-coach-steps" hidden>👆 Follow these steps</span>
+        <span class="mr-oops" id="mr-oops" aria-hidden="true" hidden></span>
       </div>
 
       <div class="mr-controls">
@@ -317,14 +318,25 @@
         </div>
       </div>
       <div class="mr-kitchen">
+        <div class="mr-progress" id="mr-progress">
+          <span class="mr-progress-label" id="mr-progress-label">Level 1 → 2</span>
+          <span class="mr-progress-bar" aria-hidden="true"><i id="mr-progress-fill"></i></span>
+          <span class="mr-progress-count" id="mr-progress-count">0/5 orders</span>
+        </div>
         <div class="mr-plate" id="mr-plate">
           <span class="wisp w1" aria-hidden="true"></span><span class="wisp w2" aria-hidden="true"></span><span class="wisp w3" aria-hidden="true"></span>
           <div class="mr-slots" id="mr-slots"></div>
           <span class="mr-achar-dish" id="mr-achar-dish" hidden>🌶️</span>
         </div>
-        <p class="mr-hint" id="mr-hint" aria-live="polite">Tap the filling the customer wants</p>
+        <p class="mr-hint sr-only" id="mr-hint" aria-live="polite">Tap the filling the customer wants</p>
         <div class="mr-fx" id="mr-fx" aria-hidden="true"></div>
         <div class="mr-countdown" id="mr-countdown" aria-live="assertive" hidden></div>
+      </div>
+      <!-- big LEVEL announcement (clock pauses while it shows) -->
+      <div class="mr-levelup" id="mr-levelup" aria-live="assertive" hidden>
+        <span class="lv-kicker" id="mr-lv-kicker">Level up!</span>
+        <span class="lv-title" id="mr-lv-title">Level 2</span>
+        <span class="lv-sub" id="mr-lv-sub"></span>
       </div>
       <!-- first-time tutorial: speech bubble that points at the button to tap -->
       <div class="mr-coach-bubble" id="mr-coach" role="status" hidden></div>

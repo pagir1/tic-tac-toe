@@ -620,6 +620,109 @@
 }
 @keyframes coach-bob { 50% { transform: translateY(5px); } }
 
+/* ================= levels + bottom area ================= */
+
+/* slimmer HUD: label and number on one line */
+.mr-hud { gap: 5px; }
+.hud { flex-direction: row; align-items: baseline; justify-content: center; gap: 5px; padding: 5px 4px; }
+.hud span { font-size: 0.6rem; }
+.hud strong { font-size: 1.05rem; }
+#mr-lives { font-size: 0.75rem; }
+
+/* big LEVEL announcement */
+.mr-levelup {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-align: center;
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  pointer-events: none; /* taps still reach the buttons */
+}
+.mr-levelup.show { animation: lv-fade 1.7s ease-in-out forwards; }
+.mr-levelup.show .lv-title { animation: lv-pop 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.4); }
+@keyframes lv-fade { 0% { opacity: 0; } 10%, 82% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes lv-pop { from { transform: scale(2.4); opacity: 0; } 50% { opacity: 1; } }
+.lv-kicker {
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--momo-strong);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.lv-title {
+  font-size: clamp(3rem, 16vw, 5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  background: linear-gradient(90deg, var(--momo-strong), #f59e0b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 4px 0 color-mix(in srgb, var(--momo-strong) 25%, transparent));
+}
+.lv-sub { max-width: 90%; font-size: 1.15rem; font-weight: 800; color: var(--text); }
+
+/* bottom area: level progress above a smaller steamer */
+.mr-kitchen { justify-content: center; gap: 14px; }
+.mr-progress {
+  width: min(100%, 340px);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--card) 80%, transparent);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+.mr-progress-label { color: var(--momo-strong); white-space: nowrap; }
+.mr-progress-count { color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.mr-progress-bar { height: 10px; border-radius: 999px; background: var(--line); overflow: hidden; }
+.mr-progress-bar i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f59e0b, var(--momo-strong));
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+.mr-plate { width: min(72%, 270px); }
+.mr-slot { width: clamp(40px, 11vw, 52px); font-size: clamp(1.8rem, 8vw, 2.3rem); }
+.mr-float { top: 40%; }
+
+/* mistakes show on the steps strip, where players are looking */
+.mr-oops {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  z-index: 3;
+  max-width: calc(100% - 16px);
+  padding: 1px 10px;
+  border-radius: 999px;
+  background: var(--bad);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 900;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transform: translateX(-50%);
+}
+.mr-oops.in { animation: oops-in 0.3s ease-out; }
+@keyframes oops-in { from { transform: translate(-50%, 6px); opacity: 0; } }
+.mr-recipe.bad { animation: shake 0.35s ease-in-out; border-color: var(--bad); }
+
 /* shorter phones */
 @media (max-height: 700px) {
   .mr-queue { min-height: 92px; }
@@ -634,6 +737,8 @@
   .mr-achar-dish, .wisp, .mr-btn.next, .mr-countdown.pop, .mr-kitchen.flash::after,
   .mr-confetti i, .mr-go, .mr-hero-momo, .mr-ticket[data-mood="angry"]::after, .mr-btn.coach::before { animation: none; }
   .mr-step { transition: none; }
+  .mr-levelup.show .lv-title, .mr-oops.in, .mr-recipe.bad { animation: none; }
+  .mr-progress-bar i { transition: none; }
   .mr-coach-bubble, .momo.tutorial .mr-recipe { animation: none; }
   .wisp { opacity: 0; }
   .mr-ticket, .mr-btn { transition: none; }

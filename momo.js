@@ -31,6 +31,7 @@ const MR_STORAGE_KEY = "momorush-state";
   let tickets = new Map(); // order id -> element
   let hintTimer, bannerTimer;
   let plateFor = null; // order id the plate is set up for
+  let oopsTimer;
 
   // ---------- storage ----------
   function load() {
@@ -100,7 +101,9 @@ const MR_STORAGE_KEY = "momorush-state";
     syncTickets();
     updateHint();
     show(null);
-    countdown();
+    countdownToken++;
+    $("mr-countdown").hidden = true;
+    showLevel(1, countdown);
   }
 
   // 3-2-1-Go before the clock starts
@@ -134,7 +137,8 @@ const MR_STORAGE_KEY = "momorush-state";
   function pause() {
     if (!running) {
       // paused during the countdown: cancel it and show the pause menu
-      if (game && !game.over && !$("mr-countdown").hidden) { countdownToken++; $("mr-countdown").hidden = true; show("paused"); }
+      const intro = !$("mr-countdown").hidden || !$("mr-levelup").hidden;
+      if (game && !game.over && intro) { countdownToken++; cancelLevel(); $("mr-countdown").hidden = true; show("paused"); }
       return;
     }
     running = false;
@@ -170,7 +174,8 @@ const MR_STORAGE_KEY = "momorush-state";
     lastFrame = now;
     // first-time players: the clock doesn't run during their very first order
     const learning = tutorial && game.served === 0;
-    handle(game.tick(learning ? 0 : dt));
+    const holding = now < holdUntil; // level announcement on screen
+    handle(game.tick(learning || holding ? 0 : dt));
     if (!running) return;
     updateBars();
     requestAnimationFrame(frame);
@@ -209,7 +214,7 @@ const MR_STORAGE_KEY = "momorush-state";
           leaveFx(e.id);
           break;
         case "levelup":
-          banner(levelMessage(e.level));
+          showLevel(e.level);
           restartAnim(view.querySelector(".mr-kitchen"), "flash");
           sfx.level();
           break;
@@ -228,16 +233,48 @@ const MR_STORAGE_KEY = "momorush-state";
   }
 
   function levelMessage(level) {
-    if (level === 2) return "Level 2 · Bigger orders: up to 2 momos";
-    if (level === 3) return "Level 3 · 🌶️ Achar orders start!";
-    if (level === 4) return "Level 4 · Up to 3 momos per order";
-    return `Level ${level} · Customers are hungrier!`;
+    if (level === 1) return `Serve ${MR.SERVES_PER_LEVEL} orders to reach Level 2`;
+    if (level === 2) return "Bigger orders: up to 2 momos";
+    if (level === 3) return "🌶️ Achar orders start!";
+    if (level === 4) return "Up to 3 momos per order";
+    return "Customers are hungrier!";
+  }
+
+  // Big full-screen "LEVEL N" announcement. The clock is held while it shows.
+  const LEVEL_SHOW_MS = 1700;
+  let holdUntil = 0;
+  let levelToken = 0;
+  function showLevel(level, then) {
+    const el = $("mr-levelup");
+    const token = ++levelToken;
+    $("mr-lv-kicker").textContent = level === 1 ? "Get ready" : "Level up!";
+    $("mr-lv-title").textContent = `Level ${level}`;
+    $("mr-lv-sub").textContent = levelMessage(level);
+    el.hidden = false;
+    restartAnim(el, "show");
+    const ms = reduceMotion ? 1200 : LEVEL_SHOW_MS;
+    holdUntil = performance.now() + ms;
+    setTimeout(() => {
+      if (token !== levelToken) return;
+      el.hidden = true;
+      if (then) then();
+    }, ms);
+  }
+  function cancelLevel() {
+    levelToken++;
+    holdUntil = 0;
+    $("mr-levelup").hidden = true;
   }
 
   // ---------- rendering ----------
   function renderHud() {
     $("mr-score").textContent = game.score;
     $("mr-level").textContent = game.level;
+    const per = MR.SERVES_PER_LEVEL;
+    const done = game.served % per;
+    $("mr-progress-label").textContent = `Level ${game.level} → ${game.level + 1}`;
+    $("mr-progress-fill").style.transform = `scaleX(${done / per})`;
+    $("mr-progress-count").textContent = `${done}/${per} orders`;
     const mult = MR.pointsFor({ qty: 0, achar: false, patience: 0, max: 1 }, game.combo + 1).mult;
     $("mr-combo").textContent = mult > 1 ? `🔥×${mult}` : `×${mult}`;
     $("mr-combo").parentElement.classList.toggle("hot", mult > 1);
@@ -451,6 +488,13 @@ const MR_STORAGE_KEY = "momorush-state";
     sfx.mistake();
     hintEl.textContent = reason;
     hintEl.classList.add("bad");
+    const oops = $("mr-oops");
+    oops.textContent = reason;
+    oops.hidden = false;
+    restartAnim(oops, "in");
+    restartAnim(recipeEl, "bad");
+    clearTimeout(oopsTimer);
+    oopsTimer = setTimeout(() => { oops.hidden = true; recipeEl.classList.remove("bad"); }, 1300);
     restartAnim(plateEl, "shake");
     if (btn) restartAnim(btn, "wrong");
     clearTimeout(hintTimer);
@@ -537,7 +581,7 @@ const MR_STORAGE_KEY = "momorush-state";
   $("mr-resume").addEventListener("click", () => { show(null); countdown(); });
   $("mr-restart").addEventListener("click", start);
   $("mr-again").addEventListener("click", start);
-  $("mr-quit").addEventListener("click", () => { running = false; countdownToken++; game = null; show("start"); goHome(); });
+  $("mr-quit").addEventListener("click", () => { running = false; countdownToken++; cancelLevel(); game = null; show("start"); goHome(); });
   $("mr-home").addEventListener("click", () => { game = null; show("start"); goHome(); });
 
   // Pause when leaving the screen or switching apps
