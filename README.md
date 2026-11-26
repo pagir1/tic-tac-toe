@@ -2,6 +2,8 @@
 
 A mobile-first browser game hub built with plain HTML, CSS and JavaScript. No build step and no dependencies.
 
+**Play it:** https://pagir1.github.io/tic-tac-toe/
+
 The home screen shows a grid of game tiles with a live clock, a Nepali greeting, your saved stats and a self-playing demo board. **Tic Tac Toe** is playable now; Bagh Chal, Memory Match, Four in a Row, Snake, Sudoku and Dots & Boxes are marked *coming soon*.
 
 ## Tic Tac Toe features
@@ -30,7 +32,7 @@ The home screen shows a grid of game tiles with a live clock, a Nepali greeting,
 | `style.css`  | Base theme and Tic Tac Toe styling          |
 | `script.js`  | Game rules, computer opponent, saved scores |
 
-## Host it online (optional)
+## Hosting
 
-Because it is a static site, you can publish it for free with GitHub Pages:
-**Settings → Pages → Source: Deploy from a branch → `main` / root**.
+The site is hosted on GitHub Pages from the `main` branch (root folder).
+Every push to `main` redeploys it automatically within a minute or two.
