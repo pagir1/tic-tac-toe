@@ -427,7 +427,7 @@ const MR_STORAGE_KEY = "momorush-state";
     const btn = view.querySelector(`.mr-btn${target}`);
     if (btn) {
       btn.classList.add("next");
-      if (game.level <= 2) btn.classList.add("coach"); // training wheels
+      if (game.level === 1) btn.classList.add("coach"); // training wheels: level 1 only
       if (stage === "fill") {
         const badge = document.createElement("span");
         badge.className = "tap-count";

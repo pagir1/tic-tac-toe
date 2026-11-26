@@ -30,10 +30,19 @@
   const levelFor = (served) => 1 + Math.floor(served / SERVES_PER_LEVEL);
   const maxQty = (level) => (level >= 4 ? 3 : level >= 2 ? 2 : 1);
   const acharChance = (level) => (level >= 3 ? Math.min(0.5, 0.2 + (level - 3) * 0.1) : 0);
-  // seconds a customer waits; extra time per extra momo
-  const patienceFor = (level, qty) => Math.max(7, 16 - (level - 1) * 1.3) + (qty - 1) * 2.5;
-  // seconds between new customers
-  const spawnGap = (level) => Math.max(2.2, 6 - (level - 1) * 0.5);
+  // Seconds a customer waits, plus extra time per extra momo.
+  // Levels 1-5 ease in; from level 6 it gets much faster each level.
+  const patienceFor = (level, qty) => {
+    if (level <= 5) return 16 - (level - 1) * 1.3 + (qty - 1) * 2.5;          // 16s -> 10.8s
+    if (level <= 10) return 10.8 - (level - 5) * 1.1 + (qty - 1) * 1.8;       // L6 9.7s ... L10 5.3s
+    return Math.max(3.5, 5.3 - (level - 10) * 0.3) + (qty - 1) * 1.5;         // keeps tightening, floor 3.5s
+  };
+  // Seconds between new customers.
+  const spawnGap = (level) => {
+    if (level <= 5) return 6 - (level - 1) * 0.5;                              // 6s -> 4s
+    if (level <= 10) return 4 - (level - 5) * 0.45;                            // L6 3.55s ... L10 1.75s
+    return Math.max(0.9, 1.75 - (level - 10) * 0.15);                          // keeps tightening, floor 0.9s
+  };
 
   function makeOrder(level, rng, id) {
     const qty = 1 + Math.floor(rng() * maxQty(level));
