@@ -565,6 +565,61 @@
 }
 @keyframes fall { to { transform: translateY(520px) rotate(var(--spin, 360deg)); opacity: 0.2; } }
 
+/* ---------- first-time tutorial ---------- */
+.momo { position: relative; }
+.mr-recipe-wrap { position: relative; }
+.mr-coach-steps {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  z-index: 2;
+  max-width: calc(100% - 16px);
+  padding: 1px 10px;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.68rem;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transform: translateX(-50%);
+}
+.momo.tutorial .mr-recipe { border-color: var(--text); animation: strip-pulse 1.4s ease-in-out infinite; }
+@keyframes strip-pulse {
+  50% { box-shadow: 0 0 0 5px color-mix(in srgb, var(--text) 15%, transparent); }
+}
+/* the bubble replaces the small TAP tag while the tutorial runs */
+.momo.tutorial .mr-btn.coach::before { display: none; }
+
+.mr-coach-bubble {
+  position: absolute;
+  z-index: 6;
+  max-width: 230px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.92rem;
+  font-weight: 800;
+  line-height: 1.3;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  animation: coach-bob 0.9s ease-in-out infinite;
+}
+.mr-coach-bubble::after {
+  content: "";
+  position: absolute;
+  top: -9px;
+  left: var(--arrow-x, 50%);
+  border: 9px solid transparent;
+  border-top: 0;
+  border-bottom-color: var(--text);
+  transform: translateX(-50%);
+}
+@keyframes coach-bob { 50% { transform: translateY(5px); } }
+
 /* shorter phones */
 @media (max-height: 700px) {
   .mr-queue { min-height: 92px; }
@@ -579,6 +634,7 @@
   .mr-achar-dish, .wisp, .mr-btn.next, .mr-countdown.pop, .mr-kitchen.flash::after,
   .mr-confetti i, .mr-go, .mr-hero-momo, .mr-ticket[data-mood="angry"]::after, .mr-btn.coach::before { animation: none; }
   .mr-step { transition: none; }
+  .mr-coach-bubble, .momo.tutorial .mr-recipe { animation: none; }
   .wisp { opacity: 0; }
   .mr-ticket, .mr-btn { transition: none; }
 }

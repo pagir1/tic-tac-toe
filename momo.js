@@ -18,7 +18,13 @@ const MR_STORAGE_KEY = "momorush-state";
   const modals = { start: $("mr-start"), paused: $("mr-paused"), over: $("mr-over") };
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const saved = { best: 0, played: 0, served: 0, muted: false };
+  const saved = { best: 0, played: 0, served: 0, muted: false, tutorialDone: false };
+  const TUTORIAL_ORDERS = 3; // first-time players get arrows for this many orders
+  let tutorial = false;
+  const coachEl = $("mr-coach");
+  const coachStepsEl = $("mr-coach-steps");
+  const gameEl = view.querySelector(".game");
+  let coachTarget = null;
   let game = null;
   let running = false;
   let lastFrame = 0;
@@ -85,6 +91,8 @@ const MR_STORAGE_KEY = "momorush-state";
   // ---------- game flow ----------
   function start() {
     game = new MR.Game();
+    tutorial = !saved.tutorialDone;
+    gameEl.classList.toggle("tutorial", tutorial);
     queueEl.textContent = "";
     tickets = new Map();
     renderPlate();
@@ -160,7 +168,9 @@ const MR_STORAGE_KEY = "momorush-state";
     if (!onScreen()) { pause(); return; }
     const dt = Math.min(0.1, (now - lastFrame) / 1000);
     lastFrame = now;
-    handle(game.tick(dt));
+    // first-time players: the clock doesn't run during their very first order
+    const learning = tutorial && game.served === 0;
+    handle(game.tick(learning ? 0 : dt));
     if (!running) return;
     updateBars();
     requestAnimationFrame(frame);
@@ -187,6 +197,7 @@ const MR_STORAGE_KEY = "momorush-state";
           sfx.achar();
           break;
         case "serve":
+          if (tutorial && game.served >= TUTORIAL_ORDERS) endTutorial();
           serveFx(e);
           buzz(e.perfect ? [15, 30, 15] : 15);
           sfx.serve(game.combo);
@@ -321,6 +332,7 @@ const MR_STORAGE_KEY = "momorush-state";
     if (!o) {
       hintEl.textContent = "Waiting for customers…";
       recipeEl.innerHTML = '<span class="mr-recipe-wait">Waiting for the next customer…</span>';
+      hideCoach();
       controlsEl.classList.remove("guiding");
       return;
     }
@@ -367,6 +379,51 @@ const MR_STORAGE_KEY = "momorush-state";
       }
     }
     controlsEl.classList.add("guiding");
+
+    // first-time tutorial: bubble with an arrow right above the button to tap
+    if (tutorial && btn) {
+      coachEl.textContent =
+        stage === "fill" ? `Tap ${F.icon} ${F.label} here${left > 1 ? ` (${left} times)` : ""}`
+        : stage === "achar" ? "Tap 🌶️ Achar here"
+        : `Now tap ${St.icon} ${St.label} to cook & serve`;
+      coachTarget = btn;
+      coachEl.hidden = false;
+      placeCoach();
+      coachStepsEl.textContent = game.served === 0
+        ? "👆 Follow these steps · no rush on your first order"
+        : "👆 Follow these steps";
+      coachStepsEl.hidden = false;
+    } else {
+      hideCoach();
+    }
+  }
+
+  function placeCoach() {
+    if (!coachTarget) return;
+    const host = gameEl.getBoundingClientRect();
+    const b = coachTarget.getBoundingClientRect();
+    const w = coachEl.offsetWidth;
+    const center = b.left + b.width / 2 - host.left;
+    const left = Math.max(4, Math.min(center - w / 2, host.width - w - 4));
+    coachEl.style.left = `${left}px`;
+    coachEl.style.top = `${b.bottom - host.top + 14}px`; // below the button, arrow points up
+    coachEl.style.setProperty("--arrow-x", `${center - left}px`);
+  }
+
+  function hideCoach() {
+    coachEl.hidden = true;
+    coachStepsEl.hidden = true;
+    coachTarget = null;
+  }
+
+  function endTutorial() {
+    tutorial = false;
+    gameEl.classList.remove("tutorial");
+    saved.tutorialDone = true;
+    save();
+    $("mr-tutorial-again").hidden = false;
+    hideCoach();
+    banner("You've got it! Now be quick 🔥");
   }
 
   // ---------- effects ----------
@@ -470,6 +527,12 @@ const MR_STORAGE_KEY = "momorush-state";
   }
   $("mr-pause").addEventListener("click", togglePause);
   $("mr-go").addEventListener("click", start);
+  $("mr-tutorial-again").addEventListener("click", () => {
+    saved.tutorialDone = false;
+    save();
+    start();
+  });
+  window.addEventListener("resize", () => { if (!coachEl.hidden) placeCoach(); });
   // resuming after a pause gets a short countdown too, so it isn't a surprise
   $("mr-resume").addEventListener("click", () => { show(null); countdown(); });
   $("mr-restart").addEventListener("click", start);
@@ -484,6 +547,7 @@ const MR_STORAGE_KEY = "momorush-state";
 
   load();
   renderSound();
+  $("mr-tutorial-again").hidden = !saved.tutorialDone;
   $("mr-best-start").textContent = saved.best;
   renderPlate();
 })();

@@ -31,6 +31,7 @@ The home screen shows a grid of game tiles with a live clock, a Nepali greeting,
 - Best score, games played and momos served saved in the browser and shown on the home screen
 - Pause, keyboard shortcuts on computers (1/2/3 fillings, A achar, Q/W/E cooking)
 - Buttons sit right under the customer orders; a steps strip (① filling → ② cook) shows what to do next, and the button to tap is lit up with a taps-left badge (plus a 👇 TAP tag on levels 1–2)
+- First-time tutorial for the first 3 orders: a speech bubble with an arrow points at each button to tap, the steps strip is labelled, and the clock doesn't run on the very first order (can be replayed from the start screen)
 - Bamboo steamer with rising steam, customer moods, 3-2-1 countdown, level-up flash, confetti for a new best
 - Sound effects made in the browser (no audio files) with a mute button
 

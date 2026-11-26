@@ -296,7 +296,10 @@
 
       <div class="mr-queue" id="mr-queue" aria-label="Customers waiting"></div>
 
-      <div class="mr-recipe" id="mr-recipe" aria-label="Order steps"></div>
+      <div class="mr-recipe-wrap">
+        <div class="mr-recipe" id="mr-recipe" aria-label="Order steps"></div>
+        <span class="mr-coach-steps" id="mr-coach-steps" hidden>👆 Follow these steps</span>
+      </div>
 
       <div class="mr-controls">
         <p class="mr-row-label">Filling</p>
@@ -323,6 +326,8 @@
         <div class="mr-fx" id="mr-fx" aria-hidden="true"></div>
         <div class="mr-countdown" id="mr-countdown" aria-live="assertive" hidden></div>
       </div>
+      <!-- first-time tutorial: speech bubble that points at the button to tap -->
+      <div class="mr-coach-bubble" id="mr-coach" role="status" hidden></div>
     </main>
 
     <!-- Start -->
@@ -351,6 +356,7 @@
         <p class="mr-best-line">🏆 Best score: <strong id="mr-best-start">0</strong></p>
         <div class="modal-actions">
           <button id="mr-go" class="primary mr-go">Open the shop</button>
+          <button id="mr-tutorial-again" class="secondary" hidden>Show the tutorial again</button>
         </div>
       </div>
     </div>
