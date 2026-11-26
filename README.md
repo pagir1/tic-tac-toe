@@ -48,3 +48,7 @@ The home screen shows a grid of game tiles with a live clock, a Nepali greeting,
 
 The site is hosted on GitHub Pages from the `main` branch (root folder).
 Every push to `main` redeploys it automatically within a minute or two.
+
+---
+
+© 2026 NepaliGamesUS. All rights reserved.

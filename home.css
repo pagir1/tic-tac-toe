@@ -335,6 +335,14 @@
 
 .footnote { margin: 4px 0 0; font-size: 0.8rem; color: var(--muted); }
 
+.site-footer {
+  margin-top: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--glass-line);
+  text-align: center;
+}
+.site-footer p { margin: 0; font-size: 0.78rem; color: var(--muted); }
+
 /* ---------- toast ---------- */
 .toast {
   position: fixed;
