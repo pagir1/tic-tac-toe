@@ -11,6 +11,7 @@
   <title>Nepaligamesus</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="baghchal.css">
 </head>
 <body>
   <!-- ================= HOME ================= -->
@@ -28,8 +29,11 @@
         <h1 id="greeting">Namaste! Ready to play?</h1>
         <div class="stats">
           <div class="stat"><strong id="stat-rounds">0</strong><span>Rounds played</span></div>
-          <div class="stat"><strong id="stat-wins">0</strong><span>X wins</span></div>
-          <div class="stat"><strong>1/7</strong><span>Games live</span></div>
+          <div class="stat"><strong id="stat-live">0/7</strong><span>Games live</span></div>
+          <div class="stat"><strong id="stat-x">0</strong><span>X wins</span></div>
+          <div class="stat"><strong id="stat-o">0</strong><span>O wins</span></div>
+          <div class="stat"><strong id="stat-tiger">0</strong><span>🐅 Tiger wins</span></div>
+          <div class="stat"><strong id="stat-goat">0</strong><span>🐐 Goat wins</span></div>
         </div>
       </header>
 
@@ -48,8 +52,8 @@
           </span>
         </button>
 
-        <button class="tile soon t-bagh" data-name="Bagh Chal">
-          <span class="badge">Coming soon</span>
+        <button class="tile ready t-bagh" data-game="bagh-chal" aria-label="Play Bagh Chal">
+          <span class="badge ready-badge">Play now</span>
           <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
             <path d="M8 8h48v48H8zM8 20h48M8 32h48M8 44h48M20 8v48M32 8v48M44 8v48M8 8l48 48M56 8 8 56M32 8 8 32l24 24 24-24z" fill="none" stroke="currentColor" stroke-width="2"/>
             <circle cx="8" cy="8" r="5" fill="currentColor"/><circle cx="56" cy="8" r="5" fill="currentColor"/>
@@ -181,7 +185,98 @@
     </main>
   </section>
 
+  <!-- ================= BAGH CHAL ================= -->
+  <section id="bagh-chal" class="view game-view" aria-label="Bagh Chal" hidden>
+    <main class="game bc">
+      <header class="top">
+        <button class="back" aria-label="Back to all games">‹ Games</button>
+        <div class="top-title">
+          <p class="brand">Nepaligamesus</p>
+          <h1>Bagh Chal</h1>
+        </div>
+        <button class="rules-btn" id="bc-rules" aria-label="How to play">?</button>
+      </header>
+
+      <div class="controls">
+        <div class="field">
+          <label for="bc-mode">Mode</label>
+          <select id="bc-mode">
+            <option value="pvp">2 Players</option>
+            <option value="cpu">vs Computer</option>
+          </select>
+        </div>
+        <div class="field cpu-only">
+          <label for="bc-side">You play</label>
+          <select id="bc-side">
+            <option value="G">🐐 Goats</option>
+            <option value="T">🐅 Tigers</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="scoreboard">
+        <div class="score tiger"><span>🐅 Tiger</span><strong id="bc-score-tiger">0</strong></div>
+        <div class="score draw"><span>Draws</span><strong id="bc-score-draw">0</strong></div>
+        <div class="score goat"><span>🐐 Goat</span><strong id="bc-score-goat">0</strong></div>
+      </div>
+
+      <p id="bc-status" class="status" aria-live="polite">Goat's turn</p>
+
+      <div class="bc-info">
+        <span class="chip" id="bc-phase">Placement</span>
+        <span class="chip">To place <strong id="bc-to-place">20/20</strong></span>
+        <span class="chip danger">Captured <strong id="bc-captured">0/5</strong></span>
+      </div>
+
+      <div class="board-wrap">
+        <svg id="bc-board" class="bc-board" viewBox="0 0 100 100" role="group" aria-label="Bagh Chal board"></svg>
+      </div>
+
+      <div class="actions bc-actions">
+        <button id="bc-undo" class="secondary">↶ Undo</button>
+        <button id="bc-restart">Restart</button>
+        <button id="bc-draw" class="secondary">Draw</button>
+      </div>
+    </main>
+
+    <!-- Game over -->
+    <div class="modal" id="bc-over" role="dialog" aria-modal="true" aria-labelledby="bc-over-title" hidden>
+      <div class="modal-card">
+        <p class="modal-icon" id="bc-over-icon">🐅</p>
+        <h2 id="bc-over-title">Tigers win!</h2>
+        <p id="bc-over-reason" class="modal-sub">5 goats captured</p>
+        <div class="modal-actions">
+          <button id="bc-again" class="primary">Play again</button>
+          <button id="bc-home" class="secondary">Back to games</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to play -->
+    <div class="modal" id="bc-help" role="dialog" aria-modal="true" aria-labelledby="bc-help-title" hidden>
+      <div class="modal-card help">
+        <h2 id="bc-help-title">How to play Bagh Chal</h2>
+        <p class="modal-sub">A traditional game from Nepal. 4 tigers hunt 20 goats.</p>
+        <ul>
+          <li><strong>Goats go first.</strong> Pieces sit on the points where lines meet and move along the lines.</li>
+          <li><strong>Placing (goats):</strong> until all 20 goats are on the board, the goat player places one goat per turn on any empty point. Placed goats can't move yet.</li>
+          <li><strong>Moving (goats):</strong> once all 20 are placed, move one goat one step along a line to an empty point.</li>
+          <li><strong>Tigers</strong> move one step along a line, or <strong>capture</strong> by jumping over one goat in a straight line to the empty point right behind it. One capture per turn, and capturing is optional.</li>
+          <li>Diagonal lines only run through some points. If there is no line, you can't move or jump that way.</li>
+          <li><strong>Tigers win</strong> by capturing 5 goats, or if goats can't move.</li>
+          <li><strong>Goats win</strong> by trapping every tiger so none can move.</li>
+          <li>Tap a piece to see where it can go. Red rings are captures. Tap it again to cancel.</li>
+        </ul>
+        <div class="modal-actions">
+          <button id="bc-help-close" class="primary">Got it</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <script src="script.js"></script>
+  <script src="baghchal-logic.js"></script>
+  <script src="baghchal.js"></script>
   <script src="home.js"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 // Home screen: screen switching, live clock + greeting, saved stats,
 // a self-playing mini board on the Tic Tac Toe tile, and "coming soon" toasts.
-// Relies on WIN_LINES and STORAGE_KEY from script.js.
+// Relies on WIN_LINES and STORAGE_KEY from script.js, BC_STORAGE_KEY from baghchal.js.
 
 const views = [...document.querySelectorAll(".view")];
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -25,18 +25,24 @@ function route() {
 
 window.addEventListener("hashchange", route);
 
-document.querySelectorAll(".tile.live").forEach((tile) => {
+// Any tile with data-game is playable and opens that game's view
+const playableTiles = [...document.querySelectorAll(".tile[data-game]")];
+playableTiles.forEach((tile) => {
   tile.addEventListener("click", () => {
     openedFromHome = true;
     location.hash = tile.dataset.game;
   });
 });
 
-document.getElementById("back").addEventListener("click", () => {
+function goHome() {
   // Use real history when we came from home, so the phone's back gesture stays in sync
   if (openedFromHome) { openedFromHome = false; history.back(); }
   else location.hash = "home";
-});
+}
+document.querySelectorAll(".back").forEach((btn) => btn.addEventListener("click", goHome));
+
+document.getElementById("stat-live").textContent =
+  `${playableTiles.length}/${document.querySelectorAll(".tile").length}`;
 
 // ---------- "coming soon" tiles ----------
 
@@ -81,14 +87,25 @@ setInterval(tickClock, 15000);
 
 // ---------- stats from saved Tic Tac Toe scores ----------
 
-function refreshStats() {
-  let s = { X: 0, O: 0, draw: 0 };
+function readScores(key, defaults) {
   try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (saved?.scores) s = { ...s, ...saved.scores };
+    const saved = JSON.parse(localStorage.getItem(key));
+    if (saved?.scores) return { ...defaults, ...saved.scores };
   } catch { /* storage unavailable */ }
+  return defaults;
+}
 
-  const stats = { rounds: s.X + s.O + s.draw, wins: s.X };
+function refreshStats() {
+  const t = readScores(STORAGE_KEY, { X: 0, O: 0, draw: 0 });
+  const b = readScores(BC_STORAGE_KEY, { tiger: 0, goat: 0, draw: 0 });
+
+  const stats = {
+    rounds: t.X + t.O + t.draw + b.tiger + b.goat + b.draw,
+    x: t.X,
+    o: t.O,
+    tiger: b.tiger,
+    goat: b.goat,
+  };
   for (const [key, value] of Object.entries(stats)) {
     const el = document.getElementById(`stat-${key}`);
     el.textContent = value;

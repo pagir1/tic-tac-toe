@@ -4,7 +4,7 @@ A mobile-first browser game hub built with plain HTML, CSS and JavaScript. No bu
 
 **Play it:** https://pagir1.github.io/tic-tac-toe/
 
-The home screen shows a grid of game tiles with a live clock, a Nepali greeting, your saved stats and a self-playing demo board. **Tic Tac Toe** is playable now; Bagh Chal, Memory Match, Four in a Row, Snake, Sudoku and Dots & Boxes are marked *coming soon*.
+The home screen shows a grid of game tiles with a live clock, a Nepali greeting, your saved stats and a self-playing demo board. **Tic Tac Toe** and **Bagh Chal** are playable now; Memory Match, Four in a Row, Snake, Sudoku and Dots & Boxes are marked *coming soon*.
 
 ## Tic Tac Toe features
 
@@ -13,6 +13,15 @@ The home screen shows a grid of game tiles with a live clock, a Nepali greeting,
 - Players alternate who goes first each round
 - Scoreboard for X, O and draws, saved in the browser between visits
 - Winning line highlight, light and dark mode, keyboard and screen-reader friendly
+
+## Bagh Chal features
+
+- Traditional Nepali Tigers vs Goats on a 5x5 board of points (diagonals only through points where row + col is even)
+- 4 tigers vs 20 goats, with a placement phase then a movement phase
+- Tigers win with 5 captures; goats win by trapping every tiger
+- **2 Players**, or **vs Computer** playing either side
+- Move hints (red rings show captures), animated moves, undo, draw, restart, how-to-play guide
+- Tiger / Goat / Draw scores saved in the browser and shown on the home screen
 
 ## How to play
 
@@ -26,11 +35,14 @@ The home screen shows a grid of game tiles with a live clock, a Nepali greeting,
 
 | File         | Purpose                                     |
 |--------------|---------------------------------------------|
-| `index.html` | Home screen and Tic Tac Toe screen          |
+| `index.html` | Home screen and each game's screen          |
 | `home.css`   | Home screen look and animations             |
 | `home.js`    | Screen switching, clock, stats, demo board  |
 | `style.css`  | Base theme and Tic Tac Toe styling          |
-| `script.js`  | Game rules, computer opponent, saved scores |
+| `script.js`  | Tic Tac Toe rules, computer opponent, scores |
+| `baghchal-logic.js` | Bagh Chal rules only (board, moves, wins, computer player); no page code |
+| `baghchal.js` | Bagh Chal screen: SVG board, taps, animation, undo, saved scores |
+| `baghchal.css` | Bagh Chal board, pieces and pop-up styles |
 
 ## Hosting
 
