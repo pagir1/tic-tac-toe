@@ -11,6 +11,8 @@ const MR_STORAGE_KEY = "momorush-state";
   const slotsEl = $("mr-slots");
   const plateEl = $("mr-plate");
   const hintEl = $("mr-hint");
+  const recipeEl = $("mr-recipe");
+  const controlsEl = view.querySelector(".mr-controls");
   const fxEl = $("mr-fx");
   const bannerEl = $("mr-banner");
   const modals = { start: $("mr-start"), paused: $("mr-paused"), over: $("mr-over") };
@@ -304,26 +306,67 @@ const MR_STORAGE_KEY = "momorush-state";
     plateEl.dataset.steam = slotsEl.querySelectorAll(".filled").length;
   }
 
+  // Shows the player exactly what to do next:
+  // - the recipe strip above the buttons (step 1 filling with dots, [achar], step 2 cook)
+  // - the target button filled solid with a "×N taps left" badge, other buttons faded
+  // - on levels 1-2 also a bouncing "👇 TAP" tag
   function updateHint() {
     clearTimeout(hintTimer);
     hintEl.classList.remove("bad");
-    view.querySelectorAll(".mr-btn.next").forEach((b) => b.classList.remove("next"));
+    view.querySelectorAll(".mr-btn").forEach((b) => {
+      b.classList.remove("next", "coach");
+      b.querySelector(".tap-count")?.remove();
+    });
     const o = game?.active;
-    if (!o) { hintEl.textContent = "Waiting for customers…"; return; }
+    if (!o) {
+      hintEl.textContent = "Waiting for customers…";
+      recipeEl.innerHTML = '<span class="mr-recipe-wait">Waiting for the next customer…</span>';
+      controlsEl.classList.remove("guiding");
+      return;
+    }
+
+    const F = FILLINGS[o.filling], St = STYLES[o.style];
     const left = o.qty - game.plate.made;
+    const stage = left > 0 ? "fill" : o.achar && !game.plate.achar ? "achar" : "cook";
+    const order = ["fill", ...(o.achar ? ["achar"] : []), "cook"];
+
+    // recipe strip
+    const dots = "●".repeat(game.plate.made) + "○".repeat(left);
+    const bodies = {
+      fill: `${F.icon} ${F.label} <span class="mr-dots" aria-label="${game.plate.made} of ${o.qty} made">${dots}</span>`,
+      achar: "🌶️ Achar",
+      cook: `${St.icon} ${St.label}`,
+    };
+    recipeEl.innerHTML = order.map((key, i) => {
+      const state = key === stage ? "current" : i < order.indexOf(stage) ? "done" : "";
+      return `<span class="mr-step ${state}"><b class="mr-num">${state === "done" ? "✓" : i + 1}</b>${bodies[key]}</span>`;
+    }).join('<span class="mr-arrow" aria-hidden="true">→</span>');
+
+    // hint line + target button
     let target;
-    if (left > 0) {
-      hintEl.textContent = `Tap ${FILLINGS[o.filling].icon} ${FILLINGS[o.filling].label}${left > 1 ? ` × ${left}` : ""}`;
+    if (stage === "fill") {
+      hintEl.textContent = `Tap ${F.icon} ${F.label}${left > 1 ? ` ${left} times` : ""}`;
       target = `[data-kind="filling"][data-value="${o.filling}"]`;
-    } else if (o.achar && !game.plate.achar) {
-      hintEl.textContent = "Add 🌶️ Achar";
+    } else if (stage === "achar") {
+      hintEl.textContent = "Tap 🌶️ Achar";
       target = `[data-kind="achar"]`;
     } else {
-      hintEl.textContent = `Cook: ${STYLES[o.style].icon} ${STYLES[o.style].label}`;
+      hintEl.textContent = `Tap ${St.icon} ${St.label} to cook & serve`;
       target = `[data-kind="style"][data-value="${o.style}"]`;
     }
-    // training wheels: glow the next button on levels 1-2
-    if (game.level <= 2) view.querySelector(`.mr-btn${target}`)?.classList.add("next");
+    const btn = view.querySelector(`.mr-btn${target}`);
+    if (btn) {
+      btn.classList.add("next");
+      if (game.level <= 2) btn.classList.add("coach"); // training wheels
+      if (stage === "fill") {
+        const badge = document.createElement("span");
+        badge.className = "tap-count";
+        badge.textContent = `×${left}`;
+        badge.setAttribute("aria-hidden", "true");
+        btn.appendChild(badge);
+      }
+    }
+    controlsEl.classList.add("guiding");
   }
 
   // ---------- effects ----------

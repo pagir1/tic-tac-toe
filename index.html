@@ -296,16 +296,7 @@
 
       <div class="mr-queue" id="mr-queue" aria-label="Customers waiting"></div>
 
-      <div class="mr-kitchen">
-        <div class="mr-plate" id="mr-plate">
-          <span class="wisp w1" aria-hidden="true"></span><span class="wisp w2" aria-hidden="true"></span><span class="wisp w3" aria-hidden="true"></span>
-          <div class="mr-slots" id="mr-slots"></div>
-          <span class="mr-achar-dish" id="mr-achar-dish" hidden>🌶️</span>
-        </div>
-        <p class="mr-hint" id="mr-hint" aria-live="polite">Tap the filling the customer wants</p>
-        <div class="mr-fx" id="mr-fx" aria-hidden="true"></div>
-        <div class="mr-countdown" id="mr-countdown" aria-live="assertive" hidden></div>
-      </div>
+      <div class="mr-recipe" id="mr-recipe" aria-label="Order steps"></div>
 
       <div class="mr-controls">
         <p class="mr-row-label">Filling</p>
@@ -321,6 +312,16 @@
           <button class="mr-btn cook" data-kind="style" data-value="fry"><b>🔥</b>Fry</button>
           <button class="mr-btn cook" data-kind="style" data-value="jhol"><b>🍲</b>Jhol</button>
         </div>
+      </div>
+      <div class="mr-kitchen">
+        <div class="mr-plate" id="mr-plate">
+          <span class="wisp w1" aria-hidden="true"></span><span class="wisp w2" aria-hidden="true"></span><span class="wisp w3" aria-hidden="true"></span>
+          <div class="mr-slots" id="mr-slots"></div>
+          <span class="mr-achar-dish" id="mr-achar-dish" hidden>🌶️</span>
+        </div>
+        <p class="mr-hint" id="mr-hint" aria-live="polite">Tap the filling the customer wants</p>
+        <div class="mr-fx" id="mr-fx" aria-hidden="true"></div>
+        <div class="mr-countdown" id="mr-countdown" aria-live="assertive" hidden></div>
       </div>
     </main>
 
@@ -344,7 +345,7 @@
             <li>From level 3 some orders want <strong>🌶️ achar</strong>. Add it before cooking.</li>
             <li>Wrong taps make customers wait longer. Perfect orders in a row build a <strong>combo</strong> (up to ×5 points).</li>
             <li>If a customer's bar runs out they leave and you lose a ❤️. Lose all 3 and the shop closes.</li>
-            <li>On levels 1–2 the next button to tap glows to help you learn.</li>
+            <li>The steps strip above the buttons always shows what to do next, and the button to tap is lit up. On levels 1–2 a 👇 TAP tag points at it too.</li>
           </ul>
         </details>
         <p class="mr-best-line">🏆 Best score: <strong id="mr-best-start">0</strong></p>

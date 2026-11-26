@@ -13,8 +13,8 @@
     buff: { icon: "🐃", label: "Buff" },
   };
   const STYLES = {
-    steam: { icon: "♨️", label: "Steamed" },
-    fry: { icon: "🔥", label: "Fried" },
+    steam: { icon: "♨️", label: "Steam" },
+    fry: { icon: "🔥", label: "Fry" },
     jhol: { icon: "🍲", label: "Jhol" },
   };
   const AVATARS = ["👵", "👴", "🧑", "👩", "🧔", "👨‍🦱", "👩‍🦱", "🧑‍🎓", "👲", "🧕", "👱", "🧒"];
@@ -130,8 +130,8 @@
       if (!o) return this.mistake("No customer yet");
 
       if (kind === "filling") {
-        if (value !== o.filling) return this.mistake(`They want ${FILLINGS[o.filling].label}`);
-        if (this.plate.made >= o.qty) return this.mistake("Enough momos. Now cook them");
+        if (value !== o.filling) return this.mistake(`Wrong! Tap ${FILLINGS[o.filling].icon} ${FILLINGS[o.filling].label}`);
+        if (this.plate.made >= o.qty) return this.mistake("Enough momos! Now cook them");
         this.plate.made++;
         return [{ type: "add", made: this.plate.made, qty: o.qty }];
       }
@@ -146,7 +146,7 @@
       if (kind === "style") {
         if (this.plate.made < o.qty) return this.mistake(`Make ${o.qty - this.plate.made} more first`);
         if (o.achar && !this.plate.achar) return this.mistake("Add achar first 🌶️");
-        if (value !== o.style) return this.mistake(`They want it ${STYLES[o.style].label}`);
+        if (value !== o.style) return this.mistake(`Wrong! Tap ${STYLES[o.style].icon} ${STYLES[o.style].label}`);
 
         const perfect = this.plate.clean;
         if (perfect) this.combo++;

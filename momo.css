@@ -367,15 +367,116 @@
 }
 .mr-btn:active { box-shadow: none; transform: translateY(2px) scale(0.96); }
 
-/* next button to tap (levels 1-2) */
-.mr-btn.next {
-  border-color: var(--glow);
-  animation: glow 1s ease-in-out infinite;
+/* ---------- "what to tap" guidance ---------- */
+/* solid colors for the target button; white text reads on these in both themes */
+.mr-btn[data-value="veg"]     { --solid: #15803d; }
+.mr-btn[data-value="chicken"] { --solid: #b45309; }
+.mr-btn[data-value="buff"]    { --solid: #6b3f22; }
+.mr-btn.cook                  { --solid: #b91c1c; }
+.mr-btn.achar                 { --solid: #dc2626; }
+
+.mr-btn { position: relative; overflow: visible; }
+.mr-controls.guiding .mr-btn:not(.next) { opacity: 0.55; filter: saturate(0.5); }
+.mr-btn.next,
+.mr-btn.next[data-kind="filling"],
+.mr-btn.cook.next {
+  background: var(--solid);
+  border-color: var(--solid);
+  color: #fff;
+  opacity: 1;
+  filter: none;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--solid) 55%, #000), 0 10px 22px color-mix(in srgb, var(--solid) 45%, transparent);
+  animation: glow 1.1s ease-in-out infinite;
+  z-index: 1;
 }
+.mr-btn.next:active { transform: translateY(1px) scale(0.97); box-shadow: 0 2px 0 color-mix(in srgb, var(--solid) 55%, #000); }
 @keyframes glow {
-  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--glow) 60%, transparent); }
-  50%      { box-shadow: 0 0 0 7px color-mix(in srgb, var(--glow) 0%, transparent); transform: translateY(-2px); }
+  0%, 100% { outline: 0 solid color-mix(in srgb, var(--solid) 55%, transparent); outline-offset: 0; }
+  50%      { outline: 6px solid color-mix(in srgb, var(--solid) 0%, transparent); outline-offset: 4px; }
 }
+
+/* how many more taps on the filling */
+.tap-count {
+  position: absolute;
+  top: -10px;
+  right: -6px;
+  min-width: 30px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 2px solid var(--solid);
+  background: #fff;
+  color: var(--solid);
+  font-size: 0.85rem;
+  font-weight: 900;
+  line-height: 1.3;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* levels 1-2: bouncing TAP tag */
+.mr-btn.coach::before {
+  content: "👇 TAP";
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  animation: tap-bounce 0.8s ease-in-out infinite;
+}
+@keyframes tap-bounce { 50% { transform: translate(-50%, -5px); } }
+
+/* recipe strip just above the buttons */
+.mr-recipe {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  min-height: 48px;
+  padding: 6px;
+  border-radius: 14px;
+  background: var(--card);
+  border: 2px solid color-mix(in srgb, var(--momo-strong) 25%, var(--line));
+}
+.mr-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--muted);
+  font-weight: 800;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.mr-step.current {
+  background: var(--momo-strong);
+  color: #fff;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--momo-strong) 35%, transparent);
+}
+.mr-step.done { background: color-mix(in srgb, var(--good) 14%, var(--card)); color: var(--good); }
+.mr-num {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, currentColor 18%, transparent);
+  font-size: 0.75rem;
+}
+.mr-dots { font-size: 0.8rem; letter-spacing: 2px; }
+.mr-arrow { color: var(--muted); font-weight: 900; }
+.mr-recipe-wait { color: var(--muted); font-weight: 600; }
 
 /* 3-2-1 countdown */
 .mr-countdown {
@@ -476,7 +577,8 @@
   .mr-ticket, .mr-slot.filled, .mr-float, .mr-ghost, .mr-banner.in, .hud.hot strong,
   .mr-plate.shake, #mr-lives.shake, .mr-btn.wrong, .mr-ticket[data-mood="angry"] .mr-avatar,
   .mr-achar-dish, .wisp, .mr-btn.next, .mr-countdown.pop, .mr-kitchen.flash::after,
-  .mr-confetti i, .mr-go, .mr-hero-momo, .mr-ticket[data-mood="angry"]::after { animation: none; }
+  .mr-confetti i, .mr-go, .mr-hero-momo, .mr-ticket[data-mood="angry"]::after, .mr-btn.coach::before { animation: none; }
+  .mr-step { transition: none; }
   .wisp { opacity: 0; }
   .mr-ticket, .mr-btn { transition: none; }
 }
