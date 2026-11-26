@@ -10,50 +10,178 @@
   <meta name="apple-mobile-web-app-title" content="Nepaligamesus">
   <title>Nepaligamesus</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="home.css">
 </head>
 <body>
-  <main class="game">
-    <header class="top">
-      <p class="brand">Nepaligamesus</p>
-      <h1>Tic Tac Toe</h1>
-    </header>
+  <!-- ================= HOME ================= -->
+  <section id="home" class="view home-view" aria-label="Game library">
+    <div class="sky" aria-hidden="true">
+      <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+    </div>
 
-    <div class="controls">
-      <div class="field">
-        <label for="mode">Mode</label>
-        <select id="mode">
-          <option value="pvp">2 Players</option>
-          <option value="cpu">vs Computer</option>
-        </select>
+    <div class="home">
+      <header class="hero">
+        <div class="hero-row">
+          <p class="brand">Nepaligamesus</p>
+          <p class="clock" id="clock">--:--</p>
+        </div>
+        <h1 id="greeting">Namaste! Ready to play?</h1>
+        <div class="stats">
+          <div class="stat"><strong id="stat-rounds">0</strong><span>Rounds played</span></div>
+          <div class="stat"><strong id="stat-wins">0</strong><span>X wins</span></div>
+          <div class="stat"><strong>1/7</strong><span>Games live</span></div>
+        </div>
+      </header>
+
+      <h2 class="section-title">Pick a game</h2>
+
+      <div class="tiles">
+        <button class="tile live t-ttt" data-game="tic-tac-toe" aria-label="Play Tic Tac Toe">
+          <span class="badge now">Play now</span>
+          <span class="mini-board" id="mini-board" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </span>
+          <span class="live-text">
+            <span class="tile-name">Tic Tac Toe</span>
+            <span class="tile-sub">2 players or vs computer</span>
+            <span class="play-pill">▶ Play</span>
+          </span>
+        </button>
+
+        <button class="tile soon t-bagh" data-name="Bagh Chal">
+          <span class="badge">Coming soon</span>
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <path d="M8 8h48v48H8zM8 20h48M8 32h48M8 44h48M20 8v48M32 8v48M44 8v48M8 8l48 48M56 8 8 56M32 8 8 32l24 24 24-24z" fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="8" cy="8" r="5" fill="currentColor"/><circle cx="56" cy="8" r="5" fill="currentColor"/>
+            <circle cx="8" cy="56" r="5" fill="currentColor"/><circle cx="56" cy="56" r="5" fill="currentColor"/>
+            <circle cx="32" cy="32" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span class="tile-name">Bagh Chal</span>
+          <span class="tile-sub">Tigers vs goats</span>
+        </button>
+
+        <button class="tile soon t-memory" data-name="Memory Match">
+          <span class="badge">Coming soon</span>
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <rect x="6" y="14" width="28" height="38" rx="5" fill="none" stroke="currentColor" stroke-width="2.5" transform="rotate(-10 20 33)"/>
+            <rect x="28" y="10" width="28" height="38" rx="5" fill="currentColor" opacity=".9" transform="rotate(8 42 29)"/>
+            <path d="M42 22l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6-4.5-4 6-1z" fill="var(--tile-ink-contrast)"/>
+          </svg>
+          <span class="tile-name">Memory Match</span>
+          <span class="tile-sub">Flip &amp; find pairs</span>
+        </button>
+
+        <button class="tile soon t-four" data-name="Four in a Row">
+          <span class="badge">Coming soon</span>
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <rect x="4" y="8" width="56" height="48" rx="8" fill="none" stroke="currentColor" stroke-width="2.5"/>
+            <g fill="currentColor">
+              <circle cx="16" cy="44" r="6"/><circle cx="28" cy="44" r="6" opacity=".35"/><circle cx="40" cy="44" r="6"/>
+              <circle cx="28" cy="32" r="6"/><circle cx="40" cy="32" r="6" opacity=".35"/><circle cx="40" cy="20" r="6"/>
+              <circle cx="52" cy="44" r="6" opacity=".35"/>
+            </g>
+          </svg>
+          <span class="tile-name">Four in a Row</span>
+          <span class="tile-sub">Drop &amp; connect</span>
+        </button>
+
+        <button class="tile soon t-snake" data-name="Snake">
+          <span class="badge">Coming soon</span>
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <path class="snake-path" d="M10 50h16V34h20V18h-14" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="30" cy="18" r="5" fill="currentColor"/>
+            <circle cx="52" cy="48" r="4" fill="currentColor" opacity=".6"/>
+          </svg>
+          <span class="tile-name">Snake</span>
+          <span class="tile-sub">Eat, grow, survive</span>
+        </button>
+
+        <button class="tile soon t-sudoku" data-name="Sudoku">
+          <span class="badge">Coming soon</span>
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <rect x="6" y="6" width="52" height="52" rx="6" fill="none" stroke="currentColor" stroke-width="2.5"/>
+            <path d="M23.3 6v52M40.7 6v52M6 23.3h52M6 40.7h52" stroke="currentColor" stroke-width="1.5" opacity=".6"/>
+            <g fill="currentColor" font-size="11" font-weight="700" font-family="system-ui, sans-serif" text-anchor="middle">
+              <text x="14.7" y="19">5</text><text x="49.3" y="19">3</text><text x="32" y="36">7</text>
+              <text x="14.7" y="54">9</text><text x="49.3" y="54">1</text>
+            </g>
+          </svg>
+          <span class="tile-name">Sudoku</span>
+          <span class="tile-sub">Number logic</span>
+        </button>
+
+        <button class="tile soon t-dots" data-name="Dots &amp; Boxes">
+          <span class="badge">Coming soon</span>
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <rect x="12" y="12" width="20" height="20" fill="currentColor" opacity=".3"/>
+            <path d="M12 12h20v20H12zM32 12h20M32 32v20M12 52h20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <g fill="currentColor">
+              <circle cx="12" cy="12" r="4"/><circle cx="32" cy="12" r="4"/><circle cx="52" cy="12" r="4"/>
+              <circle cx="12" cy="32" r="4"/><circle cx="32" cy="32" r="4"/><circle cx="52" cy="32" r="4"/>
+              <circle cx="12" cy="52" r="4"/><circle cx="32" cy="52" r="4"/><circle cx="52" cy="52" r="4"/>
+            </g>
+          </svg>
+          <span class="tile-name">Dots &amp; Boxes</span>
+          <span class="tile-sub">Close the squares</span>
+        </button>
       </div>
-      <div class="field cpu-only">
-        <label for="difficulty">Difficulty</label>
-        <select id="difficulty">
-          <option value="easy">Easy</option>
-          <option value="medium" selected>Medium</option>
-          <option value="hard">Hard</option>
-        </select>
+
+      <p class="footnote">More games are on the way. Scores are saved on this device.</p>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  </section>
+
+  <!-- ================= TIC TAC TOE ================= -->
+  <section id="tic-tac-toe" class="view game-view" aria-label="Tic Tac Toe" hidden>
+    <main class="game">
+      <header class="top">
+        <button class="back" id="back" aria-label="Back to all games">‹ Games</button>
+        <div class="top-title">
+          <p class="brand">Nepaligamesus</p>
+          <h1>Tic Tac Toe</h1>
+        </div>
+        <span class="top-spacer" aria-hidden="true"></span>
+      </header>
+
+      <div class="controls">
+        <div class="field">
+          <label for="mode">Mode</label>
+          <select id="mode">
+            <option value="pvp">2 Players</option>
+            <option value="cpu">vs Computer</option>
+          </select>
+        </div>
+        <div class="field cpu-only">
+          <label for="difficulty">Difficulty</label>
+          <select id="difficulty">
+            <option value="easy">Easy</option>
+            <option value="medium" selected>Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
       </div>
-    </div>
 
-    <div class="scoreboard">
-      <div class="score x"><span>X</span><strong id="score-x">0</strong></div>
-      <div class="score draw"><span>Draws</span><strong id="score-draw">0</strong></div>
-      <div class="score o"><span>O</span><strong id="score-o">0</strong></div>
-    </div>
+      <div class="scoreboard">
+        <div class="score x"><span>X</span><strong id="score-x">0</strong></div>
+        <div class="score draw"><span>Draws</span><strong id="score-draw">0</strong></div>
+        <div class="score o"><span>O</span><strong id="score-o">0</strong></div>
+      </div>
 
-    <p id="status" class="status" aria-live="polite">X's turn</p>
+      <p id="status" class="status" aria-live="polite">X's turn</p>
 
-    <div class="board-wrap">
-      <div id="board" class="board" role="grid" aria-label="Tic Tac Toe board"></div>
-    </div>
+      <div class="board-wrap">
+        <div id="board" class="board" role="grid" aria-label="Tic Tac Toe board"></div>
+      </div>
 
-    <div class="actions">
-      <button id="restart">New Round</button>
-      <button id="reset" class="secondary">Reset Scores</button>
-    </div>
-  </main>
+      <div class="actions">
+        <button id="restart">New Round</button>
+        <button id="reset" class="secondary">Reset Scores</button>
+      </div>
+    </main>
+  </section>
 
   <script src="script.js"></script>
+  <script src="home.js"></script>
 </body>
 </html>
