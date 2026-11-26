@@ -119,6 +119,7 @@ function place(i) {
   cells[i].classList.add(current.toLowerCase());
   cells[i].disabled = true;
   cells[i].setAttribute("aria-label", `Cell ${i + 1}, ${current}`);
+  buzz(15);
 
   const result = getWinner(board);
   if (result) return endRound(result);
@@ -127,8 +128,14 @@ function place(i) {
   setStatus();
 }
 
+// Short haptic tap on phones that support it (ignored elsewhere)
+function buzz(pattern) {
+  try { navigator.vibrate?.(pattern); } catch { /* not allowed here */ }
+}
+
 function endRound({ player, line }) {
   gameOver = true;
+  if (player !== "draw") buzz([30, 60, 30]);
   cells.forEach((c) => (c.disabled = true));
   scores[player]++;
   renderScores();
