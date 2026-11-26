@@ -382,3 +382,74 @@
   .blob, .icon, .kite-tail, .steam, .tile, .tile.live::after, .play-pill, .clock::before,
   .mini-board i.on, .stat strong.bump, .toast, .view.entering { animation: none; }
 }
+
+/* ---------- Sports hub card (a link to pagir1.github.io/sports/) ---------- */
+.sports-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 14px;
+  padding: 16px 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(217, 180, 91, 0.45);
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(217, 180, 91, 0.22), transparent 55%),
+    linear-gradient(135deg, #15120e, #0b0a09);
+  color: #f4efe6;
+  text-decoration: none;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  animation: tile-in 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2) 0.5s backwards;
+}
+.sports-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 236, 190, 0.16) 50%, transparent 65%);
+  transform: translateX(-100%);
+  animation: sheen 4.5s ease-in-out infinite;
+  pointer-events: none;
+}
+.sports-card:active { transform: scale(0.98); }
+@media (hover: hover) {
+  .sports-card:hover { transform: translateY(-3px); box-shadow: 0 16px 34px rgba(0, 0, 0, 0.32); }
+}
+.sports-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  color: #d9b45b;
+  border: 1px solid rgba(217, 180, 91, 0.5);
+  background: rgba(217, 180, 91, 0.1);
+}
+.sports-icon svg { width: 30px; height: 30px; }
+.sports-text { display: flex; flex-direction: column; min-width: 0; flex: 1; text-align: left; }
+.sports-name { font-size: 1.15rem; font-weight: 800; color: #f1d58a; }
+.sports-sub { font-size: 0.8rem; color: #b9b0a2; }
+.sports-badge {
+  flex: none;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a1408;
+  background: linear-gradient(180deg, #f1d58a, #d9b45b);
+}
+.sports-badge::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: #1a1408;
+  vertical-align: 1px;
+}
+.sports-go { flex: none; font-size: 1.6rem; line-height: 1; color: #d9b45b; }
