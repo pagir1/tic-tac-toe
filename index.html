@@ -148,29 +148,24 @@
         <span class="top-spacer" aria-hidden="true"></span>
       </header>
 
-      <div class="controls">
-        <div class="field">
-          <label for="mode">Mode</label>
-          <select id="mode">
-            <option value="pvp">2 Players</option>
-            <option value="cpu">vs Computer</option>
-          </select>
-        </div>
-        <div class="field cpu-only">
-          <label for="difficulty">Difficulty</label>
-          <select id="difficulty">
-            <option value="easy">Easy</option>
-            <option value="medium" selected>Medium</option>
-            <option value="hard">Hard</option>
-          </select>
-        </div>
-      </div>
-
       <div class="scoreboard">
         <div class="score x"><span>X</span><strong id="score-x">0</strong></div>
         <div class="score draw"><span>Draws</span><strong id="score-draw">0</strong></div>
         <div class="score o"><span>O</span><strong id="score-o">0</strong></div>
       </div>
+
+      <fieldset class="seg mode-seg" id="mode">
+        <legend class="sr-only">Mode</legend>
+        <label><input type="radio" name="mode" value="pvp"><span>👥 2 Players</span></label>
+        <label><input type="radio" name="mode" value="cpu" checked><span>🤖 vs Computer</span></label>
+      </fieldset>
+
+      <fieldset class="seg diff-seg cpu-only" id="difficulty">
+        <legend class="sr-only">Difficulty</legend>
+        <label><input type="radio" name="difficulty" value="easy"><span>Easy</span></label>
+        <label><input type="radio" name="difficulty" value="medium" checked><span>Medium</span></label>
+        <label><input type="radio" name="difficulty" value="hard"><span>Hard</span></label>
+      </fieldset>
 
       <p id="status" class="status" aria-live="polite">X's turn</p>
 

@@ -11,8 +11,18 @@ const STORAGE_KEY = "ttt-state";
 const gameEl = document.querySelector(".game");
 const boardEl = document.getElementById("board");
 const statusEl = document.getElementById("status");
-const modeEl = document.getElementById("mode");
-const difficultyEl = document.getElementById("difficulty");
+// A group of radio-button tabs that reads/writes like a <select>
+function radioGroup(fieldsetId) {
+  const fs = document.getElementById(fieldsetId);
+  const inputs = [...fs.querySelectorAll("input[type=radio]")];
+  return {
+    get value() { return (inputs.find((i) => i.checked) || inputs[0]).value; },
+    set value(v) { const t = inputs.find((i) => i.value === v); if (t) t.checked = true; },
+    addEventListener: (type, fn) => fs.addEventListener(type, fn),
+  };
+}
+const modeEl = radioGroup("mode");             // default in the HTML: vs Computer
+const difficultyEl = radioGroup("difficulty");
 const scoreEls = {
   X: document.getElementById("score-x"),
   O: document.getElementById("score-o"),
