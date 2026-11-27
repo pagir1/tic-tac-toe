@@ -10,6 +10,9 @@
   const MERGE_KEY = "ng-merge";        // guest -> existing account hand-over in progress
   const RETURN_KEY = "ng-return";      // where to land after a Google redirect
   const SNAP_KEY = "ng-snapshot";      // last leaderboard, shown instantly on the next visit
+  const PROFILE_KEY = "ng-profile";    // last known profile, so the name and status show instantly
+  // where supabase-js keeps the login on this device (persistSession)
+  const AUTH_KEY = cfg.url ? `sb-${new URL(cfg.url).hostname.split(".")[0]}-auth-token` : "";
   const GUEST_DAYS = 4;
   const DAY = 86400000;
   const TIMEOUT = 9000;
@@ -73,6 +76,27 @@
   };
   const emit = (what) => listeners.forEach((fn) => { try { fn(what); } catch (e) { console.error(e); } });
 
+  // ---------- instant restore: who is this, before any network request ----------
+  // supabase-js saved the login in localStorage; read it straight away so the name,
+  // guest/saved status and "no name popup" are right from the first frame. Supabase then
+  // checks it and refreshes it in the background (autoRefreshToken).
+  const savedLogin = () => { const s = store.json(AUTH_KEY); return s?.user ? s : null; };
+  NG.user = savedLogin()?.user || null;
+  const cachedProfile = store.json(PROFILE_KEY);
+  if (NG.user && cachedProfile?.user_id === NG.user.id) NG.profile = cachedProfile;
+  function rememberProfile() {
+    store.set(PROFILE_KEY, NG.profile && NG.user ? JSON.stringify({ ...NG.profile, user_id: NG.user.id }) : null);
+  }
+  // There's a saved login but we don't know its name yet: wait before asking for one.
+  // "Settled" = the name has arrived from Supabase, or we know we can't reach it.
+  let settled = false;
+  NG.restoring = () => !settled && Boolean(NG.user) && !NG.displayName();
+
+  // Ask the browser not to clear our storage when space runs low (no prompt in Chrome/Safari)
+  if (navigator.storage?.persist && !/Firefox/i.test(navigator.userAgent)) {
+    navigator.storage.persisted?.().then((already) => already || navigator.storage.persist()).catch(() => {});
+  }
+
   NG.localName = () => store.get(NAME_KEY);
   NG.displayName = () => NG.profile?.display_name || NG.localName() || "";
   NG.isGuest = () => Boolean(NG.user?.is_anonymous);
@@ -91,30 +115,64 @@
   function goOffline() {
     NG.status = "offline";
     NG.snapshotState = "offline";
+    settled = true; // keep the saved name and status; just no scores
     emit("status");
   }
 
   // ---------- 2. Load Supabase in the background (games never wait for it) ----------
-  NG.ready = new Promise((resolve) => {
-    if (!cfg.url || !cfg.anonKey) { goOffline(); return resolve(); }
-    const s = document.createElement("script");
-    s.src = SUPABASE_JS;
-    s.async = true;
-    s.onload = () => start().catch((e) => { console.warn("Scores offline:", e); goOffline(); }).finally(resolve);
-    s.onerror = () => { goOffline(); resolve(); };
-    document.head.appendChild(s);
+  function loadLibrary() {
+    if (window.supabase) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = SUPABASE_JS;
+      s.async = true;
+      s.onload = resolve;
+      s.onerror = () => { s.remove(); reject(new Error("library offline")); };
+      document.head.appendChild(s);
+    });
+  }
+  function boot() {
+    if (!cfg.url || !cfg.anonKey) { goOffline(); return Promise.resolve(); }
+    // the phone already knows there's no connection: say so at once instead of waiting
+    if (navigator.onLine === false) { goOffline(); return Promise.resolve(); }
+    return loadLibrary().then(start).catch((e) => { console.warn("Scores offline:", e); goOffline(); });
+  }
+  NG.ready = boot();
+  // back online after opening offline: reconnect quietly
+  window.addEventListener("online", () => {
+    if (NG.status !== "offline") return;
+    NG.status = "loading";
+    NG.snapshotState = NG.snapshot ? "ready" : "loading";
+    emit("status");
+    NG.ready = boot();
   });
 
+  let listening = false;
   async function start() {
-    sb = window.supabase.createClient(cfg.url, cfg.anonKey, {
+    sb ||= window.supabase.createClient(cfg.url, cfg.anonKey, {
       auth: { flowType: "pkce", detectSessionInUrl: false, persistSession: true, autoRefreshToken: true },
     });
     if (authReturn.code) {
-      const { error } = await withTimeout(sb.auth.exchangeCodeForSession(authReturn.code));
+      const code = authReturn.code;
+      authReturn.code = null; // a code can only be used once (matters if we reconnect later)
+      const { error } = await withTimeout(sb.auth.exchangeCodeForSession(code));
       if (error && !authReturn.error) authReturn.error = error.code || "exchange_failed";
     }
-    const { data } = await withTimeout(sb.auth.getSession());
-    NG.user = data.session?.user || null;
+    // Restore (and if needed refresh) the saved login. No internet is not a reason to log out.
+    let session = null;
+    let failure = null;
+    try {
+      const { data, error } = await withTimeout(sb.auth.getSession());
+      session = data.session;
+      failure = error;
+    } catch (e) { failure = e; }
+    if (!session && failure && isNetworkError(failure) && savedLogin()) {
+      NG.user = savedLogin().user; // keep who they are; scores show "Scores offline"
+      throw failure;
+    }
+    NG.user = session?.user || null;
+    if (!NG.user) { NG.profile = null; rememberProfile(); }
+    if (!listening) listening = true; else return afterLogin();
     sb.auth.onAuthStateChange((_evt, session) => {
       // keep this callback synchronous (Supabase advice); just mirror the user
       const next = session?.user || null;
@@ -123,9 +181,16 @@
         emit("auth");
       }
     });
+    return afterLogin();
+  }
+
+  async function afterLogin() {
     NG.status = "online";
-    if (await finishRedirect()) return; // a second Google redirect is under way
+    const redirecting = await finishRedirect();
+    authReturn.error = null; // handled once; a later reconnect mustn't repeat it
+    if (redirecting) return; // a second Google redirect is under way
     await loadProfile();
+    settled = true;
     emit("auth");
     await NG.refresh();
   }
@@ -202,8 +267,9 @@
 
   // ---------- profiles ----------
   async function loadProfile() {
-    NG.profile = null;
     NG.needsName = false;
+    // keep showing the last known name while we check; drop it only if it's someone else's
+    if (!NG.user || (NG.profile?.user_id && NG.profile.user_id !== NG.user.id)) NG.profile = null;
     if (!NG.user) return;
     const { data, error } = await withTimeout(
       sb.from("profiles").select("display_name, is_guest, created_at").eq("user_id", NG.user.id).maybeSingle());
@@ -211,6 +277,7 @@
     if (data) {
       NG.profile = data;
       store.set(NAME_KEY, data.display_name);
+      rememberProfile();
       return;
     }
     // New login without a profile yet: use the device name, else the Google first name
@@ -234,6 +301,7 @@
     NG.profile = data;
     NG.needsName = false;
     store.set(NAME_KEY, data.display_name);
+    rememberProfile();
   }
 
   // "Let's play": remember the name and create an anonymous guest
@@ -412,6 +480,7 @@
   function forgetDevice() {
     store.set(NAME_KEY, null);
     store.set(MERGE_KEY, null);
+    store.set(PROFILE_KEY, null);
     NG.user = null;
     NG.profile = null;
   }

@@ -51,6 +51,12 @@
         <button class="ng-avatar" id="ng-avatar" aria-label="Your profile"><span id="ng-avatar-letter">👤</span></button>
       </header>
 
+      <!-- shown only inside WhatsApp / Messenger / Facebook / Instagram browsers (install.js) -->
+      <div class="ng-inapp" id="ng-inapp" role="note" hidden>
+        <p class="ng-inapp-text">For the best experience, open in Chrome or Safari <b>⋮ → Open in browser</b></p>
+        <button class="ng-inapp-close" id="ng-inapp-close" type="button" aria-label="Close tip">×</button>
+      </div>
+
       <div class="ng-banner" id="ng-banner" hidden>
         <button class="ng-banner-link" id="ng-banner-link">🕓 Guest scores disappear in <span id="ng-banner-days">4 days</span>. <b>Save them →</b></button>
         <button class="ng-banner-close" id="ng-banner-close" aria-label="Hide for today">×</button>

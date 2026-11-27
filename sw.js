@@ -3,7 +3,7 @@
 // installed app always gets the newest version), and the saved copy is only used
 // when there's no connection. Supabase (scores, sign-in) is never cached.
 
-const CACHE = "nepaligames-v1"; // bump to clear old saved copies
+const CACHE = "nepaligames-v2"; // bump to clear old saved copies
 const APP_FILES = [
   "./",
   "index.html",

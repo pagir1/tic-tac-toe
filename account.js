@@ -165,9 +165,19 @@
     openSignIn();
   });
 
-  // Run fn once the player has a name (first "Play" on this device asks for one)
-  function withName(fn) {
+  // Run fn once the player has a name (first "Play" on this device asks for one).
+  // If a saved login is still being restored, wait for it (with a light loading state on
+  // the tapped button) instead of flashing the name popup at someone who's signed in.
+  async function withName(fn, el = null) {
     if (NG.displayName()) return fn();
+    if (NG.restoring()) {
+      el?.classList.add("ng-busy");
+      el?.setAttribute("aria-busy", "true");
+      await Promise.race([NG.ready, new Promise((r) => setTimeout(r, 4000))]);
+      el?.classList.remove("ng-busy");
+      el?.removeAttribute("aria-busy");
+      if (NG.displayName()) return fn();
+    }
     askName("guest", fn);
   }
 

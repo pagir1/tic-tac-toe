@@ -46,11 +46,11 @@ function route() {
 }
 window.addEventListener("hashchange", route);
 
-function openGame(id) {
+function openGame(id, el) {
   NGUI.withName(() => {
     openedFromHome = true;
     location.hash = id;
-  });
+  }, el);
 }
 
 function goHome() {
@@ -61,7 +61,7 @@ function goHome() {
 document.querySelectorAll(".back").forEach((btn) => btn.addEventListener("click", goHome));
 
 document.querySelectorAll(".ng-card[data-game]").forEach((card) =>
-  card.addEventListener("click", () => openGame(card.dataset.game)));
+  card.addEventListener("click", () => openGame(card.dataset.game, card)));
 
 document.querySelectorAll(".ng-soon-card").forEach((tile) => {
   tile.addEventListener("click", () => {
@@ -83,8 +83,14 @@ function renderPlayer() {
   const name = NG.displayName();
   $("ng-avatar-letter").textContent = NGUI.initial(name);
   $("ng-avatar").setAttribute("aria-label", name ? `Your profile: ${name}` : "Your profile");
-  $("ng-hello-pre").textContent = name ? "Namaste, " : "Namaste";
-  $("ng-hello-name").textContent = name;
+  if (NG.restoring()) {
+    // signed in on this device, name still on its way: a soft placeholder, not "Namaste!"
+    $("ng-hello-pre").textContent = "Namaste, ";
+    $("ng-hello-name").innerHTML = '<span class="skel"></span>';
+  } else {
+    $("ng-hello-pre").textContent = name ? "Namaste, " : "Namaste";
+    $("ng-hello-name").textContent = name;
+  }
 
   const days = NG.guestDaysLeft();
   $("ng-banner").hidden = !days || NGUI.bannerHiddenToday();
@@ -103,7 +109,7 @@ function renderPlayer() {
     $("ng-continue-icon").querySelector("#mini-board")?.removeAttribute("id");
     $("ng-continue-name").textContent = info.name;
     $("ng-continue-sub").textContent = info.sub;
-    $("ng-continue-row").onclick = () => openGame(last);
+    $("ng-continue-row").onclick = () => openGame(last, $("ng-continue-row"));
   }
 
   let mr = { best: 0 };

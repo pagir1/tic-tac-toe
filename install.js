@@ -7,6 +7,7 @@
 
 (function () {
   const DISMISS_KEY = "ng-install-dismissed";
+  const INAPP_KEY = "ng-inapp-tip-closed";
   const INSTALLED_KEY = "ng-installed";
   const HIDE_DAYS = 7;
   const card = document.getElementById("ng-install");
@@ -32,6 +33,10 @@
   const isIOS = () =>
     /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
     (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1); // iPadOS shows as a Mac
+  // WhatsApp / Messenger / Facebook / Instagram open links in their own browser, which
+  // often forgets sign-ins when it closes (and can't install apps)
+  const isInAppBrowser = () =>
+    /FBAN|FBAV|FB_IAB|FBIOS|FB4A|Messenger|MessengerForiOS|Instagram|WhatsApp/i.test(navigator.userAgent);
   const dismissedRecently = () => {
     const at = Number(store.get(DISMISS_KEY) || 0);
     return at && Date.now() - at < HIDE_DAYS * 86400000;
@@ -39,8 +44,23 @@
 
   function render() {
     const canInstall = Boolean(deferredPrompt) || (isIOS() && !store.get(INSTALLED_KEY));
-    card.hidden = isStandalone() || dismissedRecently() || !canInstall;
+    card.hidden = isStandalone() || isInAppBrowser() || dismissedRecently() || !canInstall;
   }
+
+  // ---------- "open in Chrome or Safari" tip (part of the page, never over the games) ----------
+  const tip = document.getElementById("ng-inapp");
+  function renderTip() {
+    let closedAt = 0;
+    try { closedAt = Number(sessionStorage.getItem(INAPP_KEY) || store.get(INAPP_KEY) || 0); } catch { /* n/a */ }
+    tip.hidden = !isInAppBrowser() || isStandalone() || Date.now() - closedAt < 86400000;
+  }
+  document.getElementById("ng-inapp-close").addEventListener("click", () => {
+    const now = String(Date.now());
+    try { sessionStorage.setItem(INAPP_KEY, now); } catch { /* n/a */ }
+    store.set(INAPP_KEY, now);
+    renderTip();
+  });
+  renderTip();
 
   // Chrome / Edge / Samsung Internet: keep the real prompt for our button
   window.addEventListener("beforeinstallprompt", (e) => {
@@ -81,5 +101,5 @@
   window.matchMedia("(display-mode: standalone)").addEventListener?.("change", render);
 
   render();
-  window.NGInstall = { render, isStandalone, isIOS };
+  window.NGInstall = { render, isStandalone, isIOS, isInAppBrowser };
 })();
