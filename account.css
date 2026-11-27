@@ -197,3 +197,89 @@ button.busy { opacity: 0.7; }
 @media (prefers-reduced-motion: reduce) {
   .ng-result-crown, .ng-confetti i { animation: none; }
 }
+
+/* ---------- "Add Nepaligames to your home screen" card (in the page flow, never floating) ---------- */
+.ng-install {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 6px 10px 10px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(122, 167, 255, 0.14), rgba(242, 85, 122, 0.1));
+  border: 1px solid rgba(122, 167, 255, 0.28);
+}
+.ng-install-icon { flex: none; width: 40px; height: 40px; border-radius: 10px; }
+.ng-install-text {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text);
+}
+.ng-install-btn {
+  flex: none;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  color: #12141b;
+  font-weight: 800;
+}
+.ng-install-close {
+  flex: none;
+  width: 36px;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 1.3rem;
+}
+/* very narrow screens or large text: button drops under the text */
+@media (max-width: 380px) {
+  .ng-install { flex-wrap: wrap; }
+  .ng-install-text { flex-basis: calc(100% - 100px); }
+  .ng-install-btn { margin-left: 50px; }
+}
+
+/* iPhone steps */
+.ng-ios-icon { justify-self: center; width: 64px; height: 64px; border-radius: 15px; }
+.ng-ios-steps { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; text-align: left; }
+.ng-ios-steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--card-2, #1e2330);
+  line-height: 1.4;
+}
+.ng-ios-num {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--pink, #f2557a);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+.ng-ios-glyph { width: 20px; height: 20px; vertical-align: -4px; color: #7aa7ff; }
+
+/* ---------- Challenge a friend ---------- */
+.ng-share {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 6px;
+  border-radius: 14px;
+  border: 0;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #2b1a00;
+  font-weight: 800;
+}
+.ng-toast { z-index: 60; }

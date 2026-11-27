@@ -190,7 +190,7 @@ function reportRound(player) {
     overModal.hidden = false;
     document.getElementById("ttt-again").focus();
     window.ngReportResult?.({
-      game: "tic-tac-toe", mode: "cpu", points,
+      game: "tic-tac-toe", mode: "cpu", points, win: outcome === "win",
       note: easy ? "Play Medium or Hard to earn points" : "",
       container: document.getElementById("ttt-result"),
     });

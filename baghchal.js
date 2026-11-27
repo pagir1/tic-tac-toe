@@ -376,7 +376,7 @@ const BC_STORAGE_KEY = "baghchal-state";
       if (history.length >= DRAW_MIN_MOVES) points = BC_POINTS.draw;
       else note = `Draws earn points after ${DRAW_MIN_MOVES} moves`;
     }
-    window.ngReportResult?.({ game: "bagh-chal", mode: "cpu", points, side: mine, note, container: result });
+    window.ngReportResult?.({ game: "bagh-chal", mode: "cpu", points, side: mine, note, container: result, win: winner === mine });
   }
 
   function offerDraw() {

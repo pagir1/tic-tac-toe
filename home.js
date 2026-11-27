@@ -25,12 +25,20 @@ function showView(id) {
   target.classList.add("entering");
   window.scrollTo(0, 0);
   document.documentElement.classList.toggle("on-home", target.id === "home");
+  setThemeColor(target.id === "home");
   if (target.id === "home") {
     renderHome();
     NG.refresh(); // fresh top scores every time the player comes back
   } else if (GAME_INFO[target.id]) {
     NGUI.Activity.openedGame(target.id);
   }
+}
+
+// Phone status bar / installed-app title bar: dark on home, the game screen's colour in games
+const themeMeta = document.getElementById("theme-color");
+function setThemeColor(onHome) {
+  const dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  themeMeta.content = onHome ? "#0d1017" : dark ? "#111318" : "#f4f5f7";
 }
 
 function route() {

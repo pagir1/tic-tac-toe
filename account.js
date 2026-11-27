@@ -292,6 +292,7 @@
     $("ng-prof-best").hidden = !best;
     $("ng-prof-best").textContent = best ? `🏆 Best week ever: ${best} pts` : "";
 
+    $("ng-prof-share").hidden = !(NG.snapshot?.me?.points > 0);
     $("ng-prof-save").hidden = !guest;
     $("ng-prof-signin").hidden = guest || saved;
     $("ng-prof-signout").hidden = !saved;
@@ -320,6 +321,7 @@
     openModal(profModal);
   }
 
+  $("ng-prof-share").addEventListener("click", () => challenge(weeklyTotal()));
   $("ng-prof-rename").addEventListener("click", () => { closeModal(profModal); askName("rename"); });
   $("ng-prof-save").addEventListener("click", () => { closeModal(profModal); openSignIn(); });
   $("ng-prof-signin").addEventListener("click", () => { closeModal(profModal); openSignIn(); });
@@ -387,9 +389,52 @@
     failed: "Couldn't save this result. Try again later.",
   };
 
+  // ---------- "Challenge a friend 📤" ----------
+
+  const SITE_URL = "https://pagir1.github.io/tic-tac-toe/";
+  const challengeText = (pts) => `I have ${pts} pts on Nepaligames 👑 Can you beat me? ${SITE_URL}`;
+  // this week's total across all games (same number as the leaderboard)
+  const weeklyTotal = (atLeast = 0) => Math.max(NG.snapshot?.me?.points || 0, atLeast);
+
+  async function copyText(text) {
+    try { await navigator.clipboard.writeText(text); return true; }
+    catch {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand("copy"); } catch { /* n/a */ }
+      ta.remove();
+      return ok;
+    }
+  }
+
+  // Phones: the share sheet. Computers: copy the text.
+  async function challenge(pts) {
+    const text = challengeText(pts);
+    const phone = window.matchMedia("(pointer: coarse)").matches;
+    if (phone && navigator.share) {
+      try { await navigator.share({ text }); return; }
+      catch (e) { if (e.name === "AbortError") return; } // closed the share sheet
+    }
+    toast(await copyText(text) ? "Link copied!" : "Couldn't copy. Long-press to copy the link instead.");
+  }
+
+  function challengeButton(getPoints) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "ng-share";
+    b.textContent = "Challenge a friend 📤";
+    b.addEventListener("click", () => challenge(getPoints()));
+    return b;
+  }
+
   // Called by the games when a round ends.
-  // { game, mode: "cpu" | "pvp" | "solo", points, side, note, container }
-  async function reportResult({ game, mode, points = 0, side = null, note = "", container = null }) {
+  // { game, mode: "cpu" | "pvp" | "solo", points, side, note, container, win }
+  async function reportResult({ game, mode, points = 0, side = null, note = "", container = null, win = false }) {
     Activity.markPlayed(game);
     if (mode !== "cpu" || !container) return;
     container.innerHTML = "";
@@ -439,6 +484,7 @@
         confetti();
         try { navigator.vibrate?.([40, 60, 40, 60, 80]); } catch { /* n/a */ }
       }
+      if (win) container.appendChild(challengeButton(() => weeklyTotal(r.weekly)));
       if (NG.isGuest()) {
         container.appendChild(linkLine("Save your scores so they don't disappear →", () => {
           container.closest(".modal")?.setAttribute("hidden", "");
@@ -459,6 +505,7 @@
   window.ngReportResult = reportResult;
   window.NGUI = {
     Activity, askName, withName, openSignIn, openProfile, toast, initial, plural,
+    openModal, closeModal, challengeText,
     bannerHiddenToday: () => { try { return localStorage.getItem(BANNER_KEY) === dayKey(); } catch { return false; } },
     hideBannerToday: () => { try { localStorage.setItem(BANNER_KEY, dayKey()); } catch { /* n/a */ } },
   };

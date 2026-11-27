@@ -3,12 +3,36 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f4f5f7" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
+  <!-- status bar colour: dark home screen; home.js switches it for the game screens -->
+  <meta name="theme-color" id="theme-color" content="#0d1017">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Nepaligamesus">
+  <meta name="apple-mobile-web-app-title" content="Nepaligames">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="description" content="Play Bagh Chal and Tic Tac Toe, Nepali style. Beat the champion!">
   <title>nepaligames.</title>
+
+  <!-- installable app -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
+  <!-- link previews (WhatsApp, Messenger, Viber, X) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Nepaligames">
+  <meta property="og:url" content="https://pagir1.github.io/tic-tac-toe/">
+  <meta property="og:title" content="Nepaligames: Can you take the crown? 👑">
+  <meta property="og:description" content="Play Bagh Chal and Tic Tac Toe, Nepali style. Beat the champion!">
+  <meta property="og:image" content="https://pagir1.github.io/tic-tac-toe/og-image.jpg">
+  <meta property="og:image:secure_url" content="https://pagir1.github.io/tic-tac-toe/og-image.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="nepaligames. Can you take the crown? Bagh Chal and Tic Tac Toe">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nepaligames: Can you take the crown? 👑">
+  <meta name="twitter:description" content="Play Bagh Chal and Tic Tac Toe, Nepali style. Beat the champion!">
+  <meta name="twitter:image" content="https://pagir1.github.io/tic-tac-toe/og-image.jpg">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="baghchal.css">
@@ -38,6 +62,13 @@
           <p class="ng-greet-sub">Ready to take the crown?</p>
         </div>
         <span class="ng-streak" id="ng-streak" hidden>🔥 <b id="ng-streak-text">1 day</b></span>
+      </div>
+
+      <div class="ng-install" id="ng-install" hidden>
+        <img class="ng-install-icon" src="icons/icon-192.png" alt="" width="40" height="40">
+        <p class="ng-install-text">📲 Add Nepaligames to your home screen</p>
+        <button class="ng-install-btn" id="ng-install-btn" type="button">Install</button>
+        <button class="ng-install-close" id="ng-install-close" type="button" aria-label="Not now">×</button>
       </div>
 
       <section class="ng-hero" id="ng-hero" data-state="loading" aria-labelledby="ng-hero-kicker">
@@ -169,7 +200,6 @@
       </footer>
     </div>
 
-    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
   </section>
 
   <!-- ================= TIC TAC TOE ================= -->
@@ -542,6 +572,7 @@
       </div>
       <p class="ng-prof-best" id="ng-prof-best" hidden></p>
       <div class="ng-prof-actions" id="ng-prof-actions">
+        <button class="ng-share" type="button" id="ng-prof-share" hidden>Challenge a friend 📤</button>
         <button class="ng-primary" type="button" id="ng-prof-save" hidden>Save my scores</button>
         <button class="ng-secondary" type="button" id="ng-prof-signin" hidden>Sign in</button>
         <button class="ng-secondary" type="button" id="ng-prof-signout" hidden>Sign out</button>
@@ -557,6 +588,24 @@
     </div>
   </div>
 
+  <div class="modal ng-modal ng-dark" id="ng-ios" role="dialog" aria-modal="true" aria-labelledby="ng-ios-title" hidden>
+    <div class="modal-card ng-sheet">
+      <button class="ng-x" type="button" data-close aria-label="Close">×</button>
+      <img class="ng-ios-icon" src="icons/icon-192.png" alt="" width="64" height="64">
+      <h2 id="ng-ios-title">Add Nepaligames to your Home Screen</h2>
+      <ol class="ng-ios-steps">
+        <li><span class="ng-ios-num">1</span><span>Tap the <b>Share</b> button
+          <svg class="ng-ios-glyph" viewBox="0 0 24 24" aria-label="Share icon"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10H6a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1h-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          in Safari's toolbar</span></li>
+        <li><span class="ng-ios-num">2</span><span>Scroll down and tap <b>Add to Home Screen</b>
+          <svg class="ng-ios-glyph" viewBox="0 0 24 24" aria-label="Add icon"><rect x="4" y="4" width="16" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></li>
+        <li><span class="ng-ios-num">3</span><span>Tap <b>Add</b>. Nepaligames opens like an app, without the browser bar.</span></li>
+      </ol>
+      <button class="ng-primary" type="button" data-close>Got it</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast ng-toast" role="status" aria-live="polite" hidden></div>
   <div class="ng-confetti" id="ng-confetti" aria-hidden="true"></div>
 
   <script src="supabase-config.js"></script>
@@ -567,6 +616,7 @@
   <script src="momo-logic.js"></script>
   <script src="momo.js"></script>
   <script src="account.js"></script>
+  <script src="install.js"></script>
   <script src="home.js"></script>
 </body>
 </html>
